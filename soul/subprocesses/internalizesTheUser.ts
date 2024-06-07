@@ -74,7 +74,7 @@ const internalizesTheUser: MentalProcess = async ({ workingMemory: initialStep }
 
     const [, learnedSomethingNew] = await mentalQuery(
       step,
-      `${step.soulName} has learned something new about the user and they need to update the mental model of the user.`,
+      `${step.soulName} has learned something new about the user and they need to update their mental model of ${userName.current}.`,
       { model: "quality" }
     )
 
@@ -83,7 +83,7 @@ const internalizesTheUser: MentalProcess = async ({ workingMemory: initialStep }
       let monologue
       [step, monologue] = await internalMonologue(step,
         {
-          instructions: `What have I learned specifically about the user from the last few messages?`,
+          instructions: `What have I learned specifically about ${userName.current} from the last few messages?`,
           verb: "mused"
         },
         { model: "quality" }

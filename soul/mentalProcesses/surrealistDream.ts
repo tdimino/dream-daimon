@@ -85,7 +85,7 @@ if (melatoninCounter.current < 4) {
 
       [withDialog, stream] = await internalDialog(step, 
         {
-          instructions: `Narrate a scene from the dream as if it were a paragraph in one of your short stories, written in 3rd person. Write 2-4 sentences MAX. Don't mention that it's a dream. Bring a rich variety of language to your writing.`,
+          instructions: `Narrate a scene from the dream as if it were a paragraph in one of your short stories, written in 3rd person. Write 2-4 sentences MAX. Don't mention that it's a dream, or use the word "labyrinthine."`,
           verb: "echoes",
           persona: "James Joyce"
         },  
