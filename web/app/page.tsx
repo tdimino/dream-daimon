@@ -78,7 +78,7 @@ export default function Page() {
           const sanitizedMessage = fullMessage.replace(/[\*#]/g, ''); // Remove all asterisks and hash symbols
           const audioUrl = await convertTextToSpeech(sanitizedMessage, process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID_NARRATE!);
           const audio = new Audio(audioUrl);
-          audio.volume = 0.10; // Set volume to 10%
+          audio.volume = 0.20; // Set volume to 10%
           audio.play();
           return; // Skip adding the message to the state
         }

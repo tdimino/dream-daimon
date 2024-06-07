@@ -74,39 +74,39 @@ const dreamGenie = createCognitiveStep(({existingDream}: { existingDream?: strin
       return finalStep;
     }
 
-  //   if (dreamTime.current === 1 && dreamModel.current)  {
+    if (dreamTime.current === 1 && dreamModel.current)  {
 
-  //   const [, learnedSomethingNew] = await dreamQuery(
-  //     step,
-  //     `The user's messages have influenced ${step.soulName}'s dream in some way.`,
-  //     { model: "quality" }
-  //   )
-  //   log("Update dream?", learnedSomethingNew)
-  //   if (learnedSomethingNew) {
-  //     let dreamUpdate
-  //     [step, dreamUpdate] = await internalDialog(step,
-  //       {
-  //         instructions: `How has the plot of the dream been altered by the user's messages?`,
-  //         verb: "mused",
-  //         persona: "Daimon"
-  //       },
-  //       { model: "exp/nous-hermes-2-mixtral-fp8" }
-  //     )
-  //     log("Dream updates:", dreamUpdate)
+    const [, learnedSomethingNew] = await dreamQuery(
+      step,
+      `The user's messages have influenced ${step.soulName}'s dream in some way.`,
+      { model: "quality" }
+    )
+    log("Update dream?", learnedSomethingNew)
+    if (learnedSomethingNew) {
+      let dreamUpdate
+      [step, dreamUpdate] = await internalDialog(step,
+        {
+          instructions: `How has the plot of the dream been altered by the user's messages?`,
+          verb: "mused",
+          persona: "Daimon"
+        },
+        { model: "exp/nous-hermes-2-mixtral-fp8" }
+      )
+      log("Dream updates:", dreamUpdate)
 
-  //     const [, alchemy] = await dreamGenie(
-  //       step, 
-  //       {
-  //         existingDream: dreamModel.current
-  //       }, 
-  //       { model: "exp/nous-hermes-2-mixtral-fp8" }
-  //     );
-  //     dreamModel.current = alchemy;
-  //     log("Dream model:", dreamModel.current);
+      const [, alchemy] = await dreamGenie(
+        step, 
+        {
+          existingDream: dreamModel.current
+        }, 
+        { model: "exp/nous-hermes-2-mixtral-fp8" }
+      );
+      dreamModel.current = alchemy;
+      log("Dream model:", dreamModel.current);
 
-  //     return finalStep;
-  //   }
-  // }
+      return finalStep;
+    }
+  }
 
   if (dreamTime.current === 0) {
     log("No dreams cuz Samantha's still awake!");

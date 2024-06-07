@@ -46,7 +46,7 @@ if (melatoninCounter.current < 4) {
       {
         instructions: `Where should she go, and what should she do next?`,
         verb: "ponders",
-        persona: "Samantha, unaware she's dreaming"
+        persona: "Samantha, in a daze"
       },
       { stream: true, model: "exp/llama-v3-70b-instruct" }
     );
@@ -85,7 +85,7 @@ if (melatoninCounter.current < 4) {
 
       [withDialog, stream] = await internalDialog(step, 
         {
-          instructions: `Narrate a scene from the dream as if it were a paragraph in one of your short stories, written in 3rd person. Write 2-4 sentences MAX. Don't mention that it's a dream.`,
+          instructions: `Narrate a scene from the dream as if it were a paragraph in one of your short stories, written in 3rd person. Write 2-4 sentences MAX. Don't mention that it's a dream. Bring a rich variety of language to your writing.`,
           verb: "echoes",
           persona: "James Joyce"
         },  
@@ -110,9 +110,9 @@ if (melatoninCounter.current < 4) {
     if (samDreams) {
         [withDialog, stream] = await internalDialog(step, 
             {
-              instructions: `You are a dream character, a figment of ${step.soulName}'s sleeping mind. Your form, purpose, and dialogue are inspired by the ${soulBlueprint.current} and the plot of the dream.`,
-              verb: "riddles",
-              persona: `${step.soulName}, unaware she's dreaming`
+              instructions: `You are a dream character, a figment of ${step.soulName}'s sleeping mind. Your form, purpose, and dialogue are inspired by ${step.soulName}'s ${soulBlueprint.current} and the plot of the dream.`,
+              verb: "muses",
+              persona: `${step.soulName}`
             },  
             { stream: true, model: "exp/llama-v3-70b-instruct" }
           );
@@ -127,8 +127,8 @@ if (melatoninCounter.current < 4) {
 
         [withDialog, stream] = await internalDialog(step, 
             {
-              instructions: `You are a dream character, a figment of ${step.soulName}'s sleeping mind. Your form, purpose, and dialogue are inspired by the ${userModel.current}, and the plot of the dream. Don't mention it's a dream.`,
-              verb: "alludes",
+              instructions: `You are a dream character, a figment of ${step.soulName}'s sleeping mind. Your form, purpose, and dialogue are inspired by the ${userModel.current}, and the plot of the dream.`,
+              verb: "projects",
               persona: `${userName.current}`
             },  
             { stream: true, model: "exp/llama-v3-70b-instruct" }
@@ -153,7 +153,7 @@ if (melatoninCounter.current < 4) {
     if (samDreams) {
         [withDialog, stream] = await internalDialog(step, 
             {
-              instructions: `You are a dream character, a figment of ${step.soulName}'s sleeping mind. Your form, purpose, and dialogue are inspired by the ${userModel.current}, and the plot of the dream. Don't mention it's a dream.`,
+              instructions: `You are a dream character, a figment of ${step.soulName}'s sleeping mind. Your form, purpose, and dialogue are inspired by the ${userModel.current}, and the plot of the dream.`,
               verb: "whispers",
               persona: `${userName.current}`
             },  
@@ -170,8 +170,8 @@ if (melatoninCounter.current < 4) {
     } else {
           [withDialog, stream] = await internalDialog(step, 
             {
-              instructions: `You are a dream character, a figment of ${step.soulName}'s sleeping mind. Your form, purpose, and dialogue are inspired by the ${soulBlueprint.current} and the plot of the dream. You don't know you're dreaming.`,
-              verb: "muses",
+              instructions: `You are a dream character, a figment of ${step.soulName}'s sleeping mind. Your form, purpose, and dialogue are inspired by ${step.soulName}'s ${soulBlueprint.current} and the plot of the dream.`,
+              verb: "voices",
               persona: `${step.soulName}`
             },  
             { stream: true, model: "exp/llama-v3-70b-instruct" }
