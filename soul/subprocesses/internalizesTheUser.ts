@@ -10,7 +10,7 @@ const userNotes = createCognitiveStep(({existingModel}: { existingModel?: string
     command: ({ soulName: name }: WorkingMemory) => {
       return {
         role: ChatMessageRoleEnum.System,
-        model: "quality",
+        model: "gpt-4-0125-preview",
         content: indentNicely`
         You are the daimon of ${name} who is tasked with maintaining a detailed mental model of ${userName.current}.
 
@@ -62,7 +62,7 @@ const internalizesTheUser: MentalProcess = async ({ workingMemory: initialStep }
     // If the user's name hasn't been learned, we need to set it for the perceptionProcessor
 
     if (!userName.current || userName.current === "Anon") {
-      const [, didLearnName] = await mentalQuery(step, `${step.soulName} has learned the user's name or nickname.`, { model: "quality" })
+      const [, didLearnName] = await mentalQuery(step, `${step.soulName} has learned the user's name or nickname.`, { model: "gpt-4-0125-preview" })
       if (didLearnName) {
         const [, extracted] = await extractName(step, undefined)
         log("Extracted name", extracted)
@@ -75,7 +75,7 @@ const internalizesTheUser: MentalProcess = async ({ workingMemory: initialStep }
     const [, learnedSomethingNew] = await mentalQuery(
       step,
       `${step.soulName} has learned something new about the user and they need to update their mental model of ${userName.current}.`,
-      { model: "quality" }
+      { model: "gpt-4-0125-preview" }
     )
 
     log("Update daimon?", learnedSomethingNew)
@@ -86,7 +86,7 @@ const internalizesTheUser: MentalProcess = async ({ workingMemory: initialStep }
           instructions: `What have I learned specifically about ${userName.current} from the last few messages?`,
           verb: "mused"
         },
-        { model: "quality" }
+        { model: "gpt-4-0125-preview" }
       )
       log("User Learnings:", monologue)
 
@@ -96,7 +96,7 @@ const internalizesTheUser: MentalProcess = async ({ workingMemory: initialStep }
         {
           existingModel: userModel.current
         }, 
-        { model: "quality" }
+        { model: "gpt-4-0125-preview" }
       );
       userModel.current = notes
       log(`${userName.current}'s Daimon:`, userModel.current)

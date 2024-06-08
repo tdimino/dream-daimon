@@ -13,7 +13,7 @@ const soulSheds = createCognitiveStep(({existingModel}: { existingModel: string 
       command: ({ soulName: name }: WorkingMemory) => {
         return {
           role: ChatMessageRoleEnum.System,
-          model: "quality",
+          model: "gpt-4-0125-preview",
           content: indentNicely`
           You are the daimon of ${name} who is tasked with maintaining a detailed mental model of ${name}.
 
@@ -125,7 +125,7 @@ let stream
     instructions: "Apologize for your narcolepsy, and briefly mention what you can recall about the weird dream you just had.", 
     verb: "yawns",
     },
-    { stream: true, model: "quality" }
+    { stream: true, model: "gpt-4o" }
 );
 dispatch({
   action: "answers",

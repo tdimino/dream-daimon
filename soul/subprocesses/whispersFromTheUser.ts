@@ -56,14 +56,14 @@ const influencedByTheUser: MentalProcess = async ({ workingMemory: initialStep }
     const [withWhispers, daimonicObservations] = await internalMonologue(
       step, 
       "Listen to your intuition and reflect on what they're saying about you, or how they want you to act.", 
-      { model: "quality" }
+      { model: "gpt-4-0125-preview" }
     );
 
     log("Introspection:", daimonicObservations);
 
     const [intuition, stream] = await userDaimon(
       withWhispers, undefined, 
-      { model: "quality"}
+      { model: "gpt-4-0125-preview"}
     );
 
     await wait(1000)
@@ -86,7 +86,7 @@ const influencedByTheUser: MentalProcess = async ({ workingMemory: initialStep }
         instructions: "Reflect on these intuitions and how they are changing your behavior.", 
         verb: "thinks",
       },
-      { model: "quality" }
+      { model: "gpt-4-0125-preview" }
     );
     log("Thought:", thought);
 

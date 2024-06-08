@@ -62,7 +62,7 @@ const userNotes = createCognitiveStep(() => {
       const [, shouldUpdateModel] = await mentalQuery(
         step, 
         `The user has observed something new about ${step.soulName} and they're likely updating their own mental model of ${step.soulName}.`,
-        { model: "quality" }
+        { model: "gpt-4-0125-preview" }
       );  
 
       log("Update self model?", shouldUpdateModel)

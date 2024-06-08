@@ -8,6 +8,8 @@ import { useOnMount } from "@/lib/hooks/use-on-mount";
 import { Soul, said } from "@opensouls/engine";
 import { Fragment, useRef, useState, useEffect } from "react";
 import DarkModeBackground from "@/components/DarkModeBackground";
+import MadeWithSoulEngine from "@/components/MadeWithSoulEngine";
+import JoinDiscord from "@/components/JoinDiscord";
 
 export type ChatMessage =
   | {
@@ -232,6 +234,10 @@ export default function Page() {
   return (
     <div className="py-6">
       {isDarkMode && <DarkModeBackground />} {/* Conditionally render DarkModeBackground */}
+      <div className="fixed top-0 left-0 right-0 flex justify-between p-4">
+        <MadeWithSoulEngine position="left" />
+        <JoinDiscord position="right" />
+      </div>
       <div className="mb-10 flex justify-between">
         <div>
           <h1 className={`h-10 text-2xl font-heading sm:text-3xl tracking-tighter ${isDarkMode ? 'matrix-green' : ''}`}> {/* Apply matrix-green class when isDarkMode is true */}
@@ -259,7 +265,7 @@ export default function Page() {
                 }).catch(console.error);
               }
             }}
-            className="text-primary font-medium bg-secondary hover:underline"
+            className="text-primary font-medium bg-secondary hover:underline z-10" // Add z-10 class
           >
             HONK
           </Button>
@@ -272,7 +278,7 @@ export default function Page() {
               setMessages([]);
               setIsDarkMode(false); // Disable dark mode
             }}
-            className="text-primary font-medium [&:not(:disabled):hover]:underline"
+            className="text-primary font-medium [&:not(:disabled):hover]:underline z-10" // Add z-10 class
           >
             Start over
           </Button>

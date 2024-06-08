@@ -77,7 +77,7 @@ if (melatoninCounter.current < 4) {
     //     description: `Choose any of the scenes from ${dreamModel.current}, based on the recent exchanges between ${userName.current} and ${step.soulName}.`,
     //     choices: [Scene1, Scene2, Scene3, Scene4],
     //   },
-    //   { model: "quality" }
+    //   { model: "gpt-4-0125-preview" }
     // );
 
     // log("Scene:", scene);
