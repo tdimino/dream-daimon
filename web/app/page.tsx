@@ -235,16 +235,20 @@ export default function Page() {
     <div className="py-6">
       {isDarkMode && <DarkModeBackground />} {/* Conditionally render DarkModeBackground */}
       <div className="fixed top-0 left-0 right-0 flex justify-between p-4">
-        <MadeWithSoulEngine position="left" />
-        <JoinDiscord position="right" />
+        <div className="hidden sm:block">
+          <MadeWithSoulEngine position="left" />
+        </div>
+        <div className="hidden sm:block">
+          <JoinDiscord position="right" />
+        </div>
       </div>
       <div className="mb-10 flex justify-between">
         <div>
           <h1 className={`h-10 text-2xl font-heading sm:text-3xl tracking-tighter ${isDarkMode ? 'matrix-green' : ''}`}> {/* Apply matrix-green class when isDarkMode is true */}
             Samantha Daimon
           </h1>
-          <h2 className={isDarkMode ? 'matrix-green' : ''}> {/* Apply matrix-green class when isDarkMode is true */}
-            <code> helps you explore your inner world!</code>
+          <h2 className={`${isDarkMode ? 'matrix-green' : ''} mt-6 sm:mt-0`}>
+            <code>helps you explore your inner world!</code>
           </h2>
 
         </div>
