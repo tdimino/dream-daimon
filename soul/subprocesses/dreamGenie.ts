@@ -63,13 +63,13 @@ const dreamGenie = createCognitiveStep(({existingDream}: { existingDream?: strin
       dreamModel.current = alchemy;
       log("Dream model:", dreamModel.current);
 
-      dispatch({
-        action: "narrates",
-        content: dreamModel.current,
-        _metadata: {
-          // Add any relevant metadata here
-        }
-      });
+      // dispatch({
+      //   action: "narrates",
+      //   content: dreamModel.current,
+      //   _metadata: {
+      //     // Add any relevant metadata here
+      //   }
+      // });
 
       return finalStep;
     }
