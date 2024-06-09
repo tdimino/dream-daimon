@@ -52,7 +52,7 @@ if (melatoninCounter.current < 4) {
     );
 
       dispatch({
-        action: "answers",
+        action: "murmurs",
         content: feeling,
         _metadata: {
           // Add any relevant metadata here
@@ -85,9 +85,9 @@ if (melatoninCounter.current < 4) {
 
       [withDialog, stream] = await internalDialog(step, 
         {
-          instructions: `Narrate a scene from the dream as if it were a paragraph in one of your short stories, written in 3rd person. Write 2-4 sentences MAX. Don't mention that it's a dream, or use the word "labyrinthine."`,
+          instructions: `Narrate a scene from the dream as if it were a paragraph in one of your short stories, as 3rd-person omniscient narrator. Write 2-4 sentences MAX. Don't mention that it's a dream, or use the word "labyrinthine."`,
           verb: "echoes",
-          persona: "James Joyce"
+          persona: "Daimonic James Joyce"
         },  
         { stream: true, model: "exp/llama-v3-70b-instruct" }
       );
@@ -117,7 +117,7 @@ if (melatoninCounter.current < 4) {
             { stream: true, model: "exp/llama-v3-70b-instruct" }
           );
           dispatch({
-            action: "answers",
+            action: "murmurs",
             content: stream,
             _metadata: {
               // Add any relevant metadata here
@@ -128,7 +128,7 @@ if (melatoninCounter.current < 4) {
         [withDialog, stream] = await internalDialog(step, 
             {
               instructions: `You are a dream character, a figment of ${step.soulName}'s sleeping mind. Your form, purpose, and dialogue are inspired by the ${userModel.current}, and the plot of the dream.`,
-              verb: "projects",
+              verb: "intones",
               persona: `${userName.current}`
             },  
             { stream: true, model: "exp/llama-v3-70b-instruct" }
@@ -171,13 +171,13 @@ if (melatoninCounter.current < 4) {
           [withDialog, stream] = await internalDialog(step, 
             {
               instructions: `You are a dream character, a figment of ${step.soulName}'s sleeping mind. Your form, purpose, and dialogue are inspired by ${step.soulName}'s ${soulBlueprint.current} and the plot of the dream.`,
-              verb: "voices",
+              verb: "chants",
               persona: `${step.soulName}`
             },  
             { stream: true, model: "exp/llama-v3-70b-instruct" }
           );
           dispatch({
-            action: "answers",
+            action: "murmurs",
             content: stream,
             _metadata: {
               // Add any relevant metadata here

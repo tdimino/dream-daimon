@@ -52,6 +52,10 @@ export default function Page() {
           const audioUrl = await convertTextToSpeech(fullMessage, process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID_DAIMON!);
           const audio = new Audio(audioUrl);
           audio.play();
+        } else if (type === 'murmurs') {
+          const audioUrl = await convertTextToSpeech(fullMessage, process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID!);
+          const audio = new Audio(audioUrl);
+          audio.play();
         } else if (type === 'conjures') { 
           const audioUrl = await convertTextToSpeech(fullMessage, process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID_GENIE!);
           const audio = new Audio(audioUrl);
@@ -143,7 +147,7 @@ export default function Page() {
 
 
 
-  async function handleSendMessage(message: string) {
+  async function handleSendMessage(message: string, verb: string) {
     if (!soul || !isConnected) {
       throw new Error("Soul not connected");
     }
@@ -156,7 +160,11 @@ export default function Page() {
       },
     ]);
 
-    await soul.dispatch(said("User", message));
+    await soul.dispatch({
+      name: "User",
+      action: verb,
+      content: message,
+    });
 
     window.scrollTo(0, document.body.scrollHeight);
   }
@@ -245,9 +253,9 @@ export default function Page() {
       <div className="mb-10 flex justify-between">
         <div>
           <h1 className={`h-10 text-2xl font-heading sm:text-3xl tracking-tighter ${isDarkMode ? 'matrix-green' : ''}`}> {/* Apply matrix-green class when isDarkMode is true */}
-            Samantha Daimon
+            Samantha
           </h1>
-          <h2 className={`${isDarkMode ? 'matrix-green' : ''} mt-6 sm:mt-0`}>
+          <h2 className={`${isDarkMode ? 'matrix-green' : ''}`}>
             <code>helps you explore your inner world!</code>
           </h2>
 
@@ -303,7 +311,11 @@ export default function Page() {
         ))}
       </div>
       <div className="container max-w-screen-md fixed inset-x-0 bottom-0 w-full">
-        <SendMessageForm isConnecting={!isConnected} isThinking={isThinking} onSendMessage={handleSendMessage} />
+        <SendMessageForm
+          isConnecting={!isConnected}
+          isThinking={isThinking}
+          onSendMessage={handleSendMessage}
+        />
       </div>
     </div>
   );
@@ -341,6 +353,10 @@ function useSoul({
       onNewMessage(await stream(), 'answers');
     });
 
+    soulInstance.on("murmurs", async ({ stream }) => {
+      onNewMessage(await stream(), 'murmurs');
+    });
+
     soulInstance.on("thinks", async ({ stream }) => {
       onNewMessage(await stream(), 'thinks');
     });
@@ -353,9 +369,9 @@ function useSoul({
       onNewMessage(await stream(), 'sleepCounter');
     });
 
-    soulInstance.on("narrates", async ({ stream }) => {
-      onNewMessage(await stream(), 'narrates');
-    });
+    // soulInstance.on("narrates", async ({ stream }) => {
+    //   onNewMessage(await stream(), 'narrates');
+    // });
 
     soulInstance.on("dream", async ({ stream }) => {
       await onDream(); // Await the onDream function

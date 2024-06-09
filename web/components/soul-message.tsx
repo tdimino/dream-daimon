@@ -7,14 +7,15 @@ export default function SoulMessage({ content, messageType }: { content: string 
   const { message } = useContentWithStreaming(content);
   const isThinking = messageType === 'thinks';
   const isConjuring = messageType === 'conjures';
+  const isMurmuring = messageType === 'murmurs';
 
   return (
-    <Message 
+    <Message
       name={isThinking ? "Daimonic whisper" : isConjuring ? "Dream Genie" : "Samantha"} 
       avatarUrl={isThinking ? "/kathor.webp" : isConjuring ? "/dreamGenie.webp" : "/samantha.webp"}
     >
       {message.length ? (
-        <div style={(isThinking || isConjuring) ? { fontStyle: 'italic', color: '#707070'} : undefined}>
+        <div style={(isThinking || isConjuring || isMurmuring) ? { fontStyle: 'italic', color: '#707070'} : undefined}>
           <Markdown>{message}</Markdown>
         </div>
       ) : <BlinkingCursor />}

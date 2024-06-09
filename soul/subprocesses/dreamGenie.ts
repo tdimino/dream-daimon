@@ -44,49 +44,45 @@ const dreamGenie = createCognitiveStep(({existingDream}: { existingDream?: strin
   })
 
   const internalizesTheDream: MentalProcess = async ({ workingMemory: initialStep }) => {
-    const dreamModel = useSoulMemory("dreamModel", "");
+    const dreamModel = useSoulMemory("dreamModel", "Unknown dream");
     const dreamTime = useSoulMemory("dreamTime", 0);
     const { log, dispatch } = useActions();
 
     let step = initialStep;
     let finalStep = initialStep;
-    
-    if (dreamTime.current === 1 && !dreamModel.current)  {
 
-      const [, alchemy] = await dreamGenie(
-        step, 
-        {
-          existingDream: dreamModel.current
-        }, 
-        { model: "exp/nous-hermes-2-mixtral-fp8" }
-      );
-      dreamModel.current = alchemy;
-      log("Dream model:", dreamModel.current);
+    // the first dream turn
+  
+      if (dreamTime.current === 1 && dreamModel.current == "Unknown dream") {
+  
+        const [, alchemy] = await dreamGenie(
+          step, 
+          {
+            existingDream: dreamModel.current
+          }, 
+          { model: "exp/nous-hermes-2-mixtral-fp8" }
+        );
+        dreamModel.current = alchemy;
+        log("Dream model:", dreamModel.current);
+  
+        return finalStep;
+      }
 
-      // dispatch({
-      //   action: "narrates",
-      //   content: dreamModel.current,
-      //   _metadata: {
-      //     // Add any relevant metadata here
-      //   }
-      // });
+    // subsequent dream turns
 
-      return finalStep;
-    }
-
-    if (dreamTime.current === 1 && dreamModel.current)  {
+    if (dreamTime.current === 1 && dreamModel.current != "Unknown dream")  {
 
     const [, learnedSomethingNew] = await dreamQuery(
       step,
-      `The user's messages have influenced ${step.soulName}'s dream in some way.`,
-      { model: "gpt-4-0125-preview" }
+      `The dream has been altered by the user's last message, or the thoughts of ${step.soulName}.`,
+      { model: "quality" }
     )
     log("Update dream?", learnedSomethingNew)
     if (learnedSomethingNew) {
       let dreamUpdate
       [step, dreamUpdate] = await internalDialog(step,
         {
-          instructions: `How has the plot of the dream been altered by the user's messages?`,
+          instructions: `How has the plot of the dream been altered?`,
           verb: "mused",
           persona: "Daimon"
         },
@@ -94,6 +90,13 @@ const dreamGenie = createCognitiveStep(({existingDream}: { existingDream?: strin
       )
       log("Dream updates:", dreamUpdate)
 
+      dispatch({
+        action: "sleepCounter",
+        content: `Dream alteration detected.`,
+        _metadata: {
+        }
+      });
+
       const [, alchemy] = await dreamGenie(
         step, 
         {
@@ -108,10 +111,8 @@ const dreamGenie = createCognitiveStep(({existingDream}: { existingDream?: strin
     }
   }
 
-  if (dreamTime.current === 0) {
-    log("No dreams cuz Samantha's still awake!");
-  }
-    return finalStep;
-  }
+  log("No dreams cuz Samantha's still awake!");
+  return finalStep;
+}
 
   export default internalizesTheDream

@@ -71,6 +71,11 @@
     font-family: 'Courier New', Courier, monospace; /* Optional: Matrix-like font */
     text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00; /* Optional: Glowing effect */
   }
+
+  .custom-apricot {
+    background-color: #FDBF6F; /* APRICOT */
+  }
+
 }
 
 @layer base {

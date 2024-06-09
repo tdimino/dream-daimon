@@ -68,7 +68,7 @@ const soulSheds = createCognitiveStep(({existingModel}: { existingModel: string 
     const [, learnedSomethingNew] = await dreamQuery(
       step,
       `${step.soulName} has been influenced or at least shaken by the dream that just transpired.`,
-      { model: "exp/nous-hermes-2-mixtral-fp8" }
+      { model: "quality" }
     )
   
     log("Update soul blueprint?", learnedSomethingNew)
