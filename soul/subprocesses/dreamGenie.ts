@@ -74,8 +74,8 @@ const dreamGenie = createCognitiveStep(({existingDream}: { existingDream?: strin
 
     const [, learnedSomethingNew] = await dreamQuery(
       step,
-      `The dream has been altered by the user's last message, or the thoughts of ${step.soulName}.`,
-      { model: "quality" }
+      `The dream has been swayed by the user's last message, or the thoughts of ${step.soulName}.`,
+      { model: "gpt-4-0125-preview" }
     )
     log("Update dream?", learnedSomethingNew)
     if (learnedSomethingNew) {
@@ -110,8 +110,9 @@ const dreamGenie = createCognitiveStep(({existingDream}: { existingDream?: strin
       return finalStep;
     }
   }
-
-  log("No dreams cuz Samantha's still awake!");
+  if (dreamTime.current === 0) {
+    log("No dreams cuz Samantha's still awake!");
+  }
   return finalStep;
 }
 

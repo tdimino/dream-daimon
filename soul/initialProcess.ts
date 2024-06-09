@@ -43,7 +43,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
     log("Sleep counter:", sleepCounter.current)
 
     const [withDialog, stream] = await externalDialog(
-      memory, "Talk to the user trying to gain their trust and learn about their inner world.", { stream: true, model: "gpt-4o" }
+      memory, "Talk to the user trying to gain their trust and learn about their inner world.", { stream: true, model: "exp/llama-v3-70b-instruct" }
     );
     dispatch({
       action: "answers",
@@ -63,7 +63,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
     
   } else {
     const [withDialog, stream] = await externalDialog(
-      memory, "Oh my god, I'm sorry, but I'm so tired. I need to log off now.", { stream: true, model: "gpt-4o" }
+      memory, "Oh my god, I'm sorry, but I'm so tired. I need to log off now.", { stream: true, model: "gpt-4-0125-preview" }
     );
     dispatch({
       action: "answers",

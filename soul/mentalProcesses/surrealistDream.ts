@@ -23,7 +23,7 @@ import soulSheds from "../mentalProcesses/soulSheds";
 
     step = step.withMemory({
         role: ChatMessageRoleEnum.System,
-        content: `${step.soulName} finds herself in this ${dreamModel.current}, although she's unaware that she's dreaming, and even who she is. Subsequent messages from the user should be interpreted as external stimuli filtering into the dream and your responses should distort, reintrepret, and weave the content of the messages into an illogical, surreal dream narrative that flows from one topic to the next based on conceptual associations rather than literal meaning or intent.`
+        content: `${step.soulName} finds herself in this ${dreamModel.current}, although she's unaware that she's dreaming, and even who she is. Subsequent messages from the user should be interpreted as external stimuli filtering into the dream and all your responses should distort, reintrepret, and weave the content of the messages into an illogical, surreal dream narrative that flows from one topic to the next based on conceptual associations rather than literal meaning or intent.`
     })
 
 // First step of the dream 
@@ -46,7 +46,7 @@ if (melatoninCounter.current < 4) {
       {
         instructions: `Where should she go, and what should she do next?`,
         verb: "ponders",
-        persona: "Samantha, in a daze"
+        persona: `${step.soulName}, in a daze`
       },
       { stream: true, model: "exp/llama-v3-70b-instruct" }
     );
@@ -61,7 +61,7 @@ if (melatoninCounter.current < 4) {
 
       log("Stream-of-consciousness:", feeling);
 
-      await wait(6000);
+      await wait(2000);
 
 // Second step of the dream 
 
@@ -85,9 +85,9 @@ if (melatoninCounter.current < 4) {
 
       [withDialog, stream] = await internalDialog(step, 
         {
-          instructions: `Narrate a scene from the dream as if it were a paragraph in one of your short stories, as 3rd-person omniscient narrator. Write 2-4 sentences MAX. Don't mention that it's a dream, or use the word "labyrinthine."`,
-          verb: "echoes",
-          persona: "Daimonic James Joyce"
+          instructions: `Narrate a scene from the dream as if it were a paragraph in one of your short stories, continuing from the previous one. Write 2-4 sentences MAX in 3rd-person omniscient. Don't mention that it's a dream, and don't use the word "labyrinthine."`,
+          verb: "conjures",
+          persona: "James Joyce"
         },  
         { stream: true, model: "exp/llama-v3-70b-instruct" }
       );
@@ -99,7 +99,7 @@ if (melatoninCounter.current < 4) {
         }
       });
 
-      await wait(14000);
+      await wait(10000);
 
 // Third step of the dream 
 
@@ -110,9 +110,9 @@ if (melatoninCounter.current < 4) {
     if (samDreams) {
         [withDialog, stream] = await internalDialog(step, 
             {
-              instructions: `You are a dream character, a figment of ${step.soulName}'s sleeping mind. Your form, purpose, and dialogue are inspired by ${step.soulName}'s ${soulBlueprint.current} and the plot of the dream.`,
+              instructions: `You are a dream character, a figment of ${step.soulName}'s sleeping mind. Your form, purpose, and dialogue are inspired by your ${soulBlueprint.current} and the plot of the dream.`,
               verb: "muses",
-              persona: `${step.soulName}`
+              persona: `${step.soulName}, half-conscious`
             },  
             { stream: true, model: "exp/llama-v3-70b-instruct" }
           );
@@ -128,7 +128,7 @@ if (melatoninCounter.current < 4) {
         [withDialog, stream] = await internalDialog(step, 
             {
               instructions: `You are a dream character, a figment of ${step.soulName}'s sleeping mind. Your form, purpose, and dialogue are inspired by the ${userModel.current}, and the plot of the dream.`,
-              verb: "intones",
+              verb: "whispers",
               persona: `${userName.current}`
             },  
             { stream: true, model: "exp/llama-v3-70b-instruct" }
@@ -142,7 +142,7 @@ if (melatoninCounter.current < 4) {
           });
     }
 
-    await wait(6000);
+    await wait(2000);
 
 // Fourth step of the dream 
 
@@ -155,7 +155,7 @@ if (melatoninCounter.current < 4) {
             {
               instructions: `You are a dream character, a figment of ${step.soulName}'s sleeping mind. Your form, purpose, and dialogue are inspired by the ${userModel.current}, and the plot of the dream.`,
               verb: "whispers",
-              persona: `${userName.current}`
+              persona: `${userName.current}, half-conscious`
             },  
             { stream: true, model: "exp/llama-v3-70b-instruct" }
           );
@@ -170,8 +170,8 @@ if (melatoninCounter.current < 4) {
     } else {
           [withDialog, stream] = await internalDialog(step, 
             {
-              instructions: `You are a dream character, a figment of ${step.soulName}'s sleeping mind. Your form, purpose, and dialogue are inspired by ${step.soulName}'s ${soulBlueprint.current} and the plot of the dream.`,
-              verb: "chants",
+              instructions: `You are a dream character, a figment of ${step.soulName}'s sleeping mind. Your form, purpose, and dialogue are inspired by your ${soulBlueprint.current} and the plot of the dream.`,
+              verb: "muses",
               persona: `${step.soulName}`
             },  
             { stream: true, model: "exp/llama-v3-70b-instruct" }

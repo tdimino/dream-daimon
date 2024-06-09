@@ -68,7 +68,7 @@ const soulSheds = createCognitiveStep(({existingModel}: { existingModel: string 
     const [, learnedSomethingNew] = await dreamQuery(
       step,
       `${step.soulName} has been influenced or at least shaken by the dream that just transpired.`,
-      { model: "quality" }
+      { model: "gpt-4-0125-preview" }
     )
   
     log("Update soul blueprint?", learnedSomethingNew)
@@ -125,7 +125,7 @@ let stream
     instructions: "Apologize for your narcolepsy, and briefly mention what you can recall about the weird dream you just had.", 
     verb: "yawns",
     },
-    { stream: true, model: "gpt-4o" }
+    { stream: true, model: "gpt-4-0125-preview" }
 );
 dispatch({
   action: "answers",

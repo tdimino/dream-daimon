@@ -73,7 +73,7 @@ async function processQueue() {
 export default function Page() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isThinking, setIsThinking] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false); // Add state for dark mode
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const { soul, isConnected, reconnect } = useSoul({
@@ -84,49 +84,29 @@ export default function Page() {
         for await (const messageChunk of stream) {
           fullMessage += messageChunk;
         }
-        let audioUrl: string | null = null;
-        if (type === 'answers') {
-          audioUrl = await convertTextToSpeech(fullMessage, process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID!);
-        } else if (type === 'thinks') {
-          audioUrl = await convertTextToSpeech(fullMessage, process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID_DAIMON!);
-        } else if (type === 'murmurs') {
-          audioUrl = await convertTextToSpeech(fullMessage, process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID!);
-        } else if (type === 'conjures') { 
-          audioUrl = await convertTextToSpeech(fullMessage, process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID_GENIE!);
-        } else if (type === 'sleepCounter') {
-          audioUrl = await convertTextToSpeechForSleepCounter(fullMessage);
-          await delay(3500); // Delay by 3.5 seconds
-        } else if (type === 'dream') {
-          audioUrl = await convertTextToSpeechForSleepCounter(fullMessage);
-        } else if (type === 'wakes') {
-          audioUrl = await convertTextToSpeechForSleepCounter(fullMessage);
-        }
-
+        const audioUrl = await getAudioUrl(fullMessage, type);
         if (audioUrl) {
           playAudio(audioUrl);
         }
-
-        if (type !== 'sleepCounter' && type !== 'dream' && type !== 'wakes') {
-          setMessages((prev) => [
-            ...prev,
-            {
-              type: "soul",
-              content: fullMessage,
-              messageType: type,
-            },
-          ]);
-        }
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "soul",
+            content: fullMessage,
+            messageType: type,
+          },
+        ]);
       } catch (error) {
         console.error("Error processing message:", error);
       } finally {
-        setIsThinking(false); // Ensure isThinking is set to false when done
+        setIsThinking(false);
       }
     },
     onProcessStarted: () => {
       setIsThinking(true);
     },
-    onDream: async () => { // Add handler for "dream" event
-      setIsDarkMode(true); // Switch to dark mode
+    onDream: async () => {
+      setIsDarkMode(true);
       const messageContent = "Entering dream state...";
       setMessages((prev) => [
         ...prev,
@@ -135,16 +115,11 @@ export default function Page() {
           content: messageContent,
         },
       ]);
-
-      try {
-        const audioUrl = await convertTextToSpeechForSleepCounter(messageContent);
-        playAudio(audioUrl);
-      } catch (error) {
-        console.error("Error playing dream state audio:", error);
-      }
+      const audioUrl = await convertTextToSpeechForSleepCounter(messageContent);
+      playAudio(audioUrl);
     },
-    onWake: async () => { // Add handler for "wakes" event
-      setIsDarkMode(false); // Switch to light mode
+    onWake: async () => {
+      setIsDarkMode(false);
       const messageContent = "Exiting dream state...";
       setMessages((prev) => [
         ...prev,
@@ -153,22 +128,35 @@ export default function Page() {
           content: messageContent,
         },
       ]);
-
-      try {
-        const audioUrl = await convertTextToSpeechForSleepCounter(messageContent);
-        playAudio(audioUrl);
-      } catch (error) {
-        console.error("Error playing wake state audio:", error);
-      }
+      const audioUrl = await convertTextToSpeechForSleepCounter(messageContent);
+      playAudio(audioUrl);
     },
   });
 
-
+  async function getAudioUrl(fullMessage: string, type: string): Promise<string | null> {
+    switch (type) {
+      case 'answers':
+      case 'murmurs':
+        return await convertTextToSpeech(fullMessage, process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID!);
+      case 'thinks':
+        return await convertTextToSpeech(fullMessage, process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID_DAIMON!);
+      case 'conjures':
+        return await convertTextToSpeech(fullMessage, process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID_GENIE!);
+      case 'sleepCounter':
+      case 'dream':
+      case 'wakes':
+        return await convertTextToSpeechForSleepCounter(fullMessage);
+      default:
+        return null;
+    }
+  }
 
   async function handleSendMessage(message: string, verb: string) {
     if (!soul || !isConnected) {
       throw new Error("Soul not connected");
     }
+
+    getAudioContext(); // Initialize audio context on user interaction
 
     setMessages((prev) => [
       ...prev,
@@ -231,14 +219,14 @@ export default function Page() {
         },
         body: JSON.stringify({
           text: text,
-          model_id: process.env.NEXT_PUBLIC_ELEVEN_LABS_MODEL_ID_COUNTER, // Use the specific model ID for sleepCounter
+          model_id: process.env.NEXT_PUBLIC_ELEVEN_LABS_MODEL_ID_COUNTER,
           voice_settings: {
             stability: 1.0,
             similarity_boost: 1.0,
             style: 0.0,
             use_speaker_boost: true
           },
-          voiceId: process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID_COUNTER, // Use the specific voice ID for sleepCounter
+          voiceId: process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID_COUNTER,
         }),
       });
 
@@ -259,7 +247,7 @@ export default function Page() {
 
   return (
     <div className="py-6">
-      {isDarkMode && <DarkModeBackground />} {/* Conditionally render DarkModeBackground */}
+      {isDarkMode && <DarkModeBackground />}
       <div className="fixed top-0 left-0 right-0 flex justify-between p-4">
         <div className="hidden sm:block">
           <MadeWithSoulEngine position="left" />
@@ -270,20 +258,19 @@ export default function Page() {
       </div>
       <div className="mb-10 flex justify-between">
         <div>
-          <h1 className={`h-10 text-2xl font-heading sm:text-3xl tracking-tighter ${isDarkMode ? 'matrix-green' : ''}`}> {/* Apply matrix-green class when isDarkMode is true */}
+          <h1 className={`h-10 text-2xl font-heading sm:text-3xl tracking-tighter ${isDarkMode ? 'matrix-green' : ''}`}>
             Samantha
           </h1>
           <h2 className={`${isDarkMode ? 'matrix-green' : ''}`}>
             <code>helps you explore your inner world!</code>
           </h2>
-
         </div>
-
         <div className="flex gap-4">
           <audio ref={audioRef} src="/honk.mp3" hidden></audio>
           <Button
             small
             onClick={() => {
+              getAudioContext(); // Initialize audio context on user interaction
               setTimeout(() => {
                 audioRef.current?.play();
               }, 0);
@@ -295,7 +282,7 @@ export default function Page() {
                 }).catch(console.error);
               }
             }}
-            className="text-primary font-medium bg-secondary hover:underline z-10" // Add z-10 class
+            className="text-primary font-medium bg-secondary hover:underline z-10"
           >
             HONK
           </Button>

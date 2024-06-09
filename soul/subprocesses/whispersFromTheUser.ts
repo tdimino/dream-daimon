@@ -5,6 +5,7 @@ import internalMonologue from "../cognitiveSteps/internalMonologue.js";
 const userDaimon = createCognitiveStep(() => {
   const userModel = useSoulMemory("userModel")
   const userName = useSoulMemory("userName")
+  const { log } = useActions()
   return {
     command: ({ soulName: name }: WorkingMemory) => {
       return {
@@ -32,6 +33,7 @@ const userDaimon = createCognitiveStep(() => {
     }
   }
 })
+
 
 const influencedByTheUser: MentalProcess = async ({ workingMemory: initialStep }) => {
   const userWhispers = useSoulMemory("userWhispers", "Daimonic observer")
@@ -85,7 +87,7 @@ const influencedByTheUser: MentalProcess = async ({ workingMemory: initialStep }
       step, 
       {
         instructions: "Reflect on these intuitions and how they are changing your behavior.", 
-        verb: "thinks",
+        verb: "reflects",
       },
       { model: "gpt-4-0125-preview" }
     );
@@ -99,4 +101,3 @@ const influencedByTheUser: MentalProcess = async ({ workingMemory: initialStep }
 }
 
 export default influencedByTheUser
-
