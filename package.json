@@ -21,6 +21,7 @@
     "react-markdown": "^9.0.1",
     "react-syntax-highlighter": "^15.5.0",
     "react-textarea-autosize": "^8.5.3",
+    "soul-engine": "^0.1.42",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7"
   },

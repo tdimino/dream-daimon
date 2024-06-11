@@ -62,7 +62,7 @@ const internalizesTheUser: MentalProcess = async ({ workingMemory: initialStep }
     // If the user's name hasn't been learned, we need to set it for the perceptionProcessor
 
     if (!userName.current || userName.current === "Anon") {
-      const [, didLearnName] = await mentalQuery(step, `${step.soulName} has learned the user's name or nickname.`, { model: "gpt-4-0125-preview" })
+      const [, didLearnName] = await mentalQuery(step, `${step.soulName} has learned or relearned the user's name.`, { model: "gpt-4-0125-preview" })
       if (didLearnName) {
         const [, extracted] = await extractName(step, undefined)
         log("Extracted name", extracted)

@@ -89,13 +89,15 @@ export default function Page() {
           audioUrl = await convertTextToSpeech(fullMessage, process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID!);
         } else if (type === 'thinks') {
           audioUrl = await convertTextToSpeech(fullMessage, process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID_DAIMON!);
+        } else if (type === 'voodoo') {
+          audioUrl = await convertTextToSpeech(fullMessage, process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID!);
         } else if (type === 'murmurs') {
           audioUrl = await convertTextToSpeech(fullMessage, process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID!);
         } else if (type === 'conjures') { 
           audioUrl = await convertTextToSpeech(fullMessage, process.env.NEXT_PUBLIC_ELEVEN_LABS_VOICE_ID_GENIE!);
         } else if (type === 'sleepCounter') {
           audioUrl = await convertTextToSpeechForSleepCounter(fullMessage);
-          await delay(3500); // Delay by 3.5 seconds
+          await delay(3000); // Delay by 3.0 seconds
         } else if (type === 'dream') {
           audioUrl = await convertTextToSpeechForSleepCounter(fullMessage);
         } else if (type === 'wakes') {
@@ -377,6 +379,10 @@ function useSoul({
 
     soulInstance.on("thinks", async ({ stream }) => {
       onNewMessage(await stream(), 'thinks');
+    });
+
+    soulInstance.on("voodoo", async ({ stream }) => {
+      onNewMessage(await stream(), 'voodoo');
     });
 
     soulInstance.on("conjures", async ({ stream }) => {

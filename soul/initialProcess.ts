@@ -1,6 +1,9 @@
 import { MentalProcess, useActions, useProcessManager, useProcessMemory, ChatMessageRoleEnum, indentNicely, useSoulMemory, createCognitiveStep, z, } from "@opensouls/engine";
 import externalDialog from "./cognitiveSteps/externalDialog.js";
 import surrealistDream from "./mentalProcesses/surrealistDream.js";
+import internalMonologue from "./cognitiveSteps/internalMonologue.js";
+import possession from "./mentalProcesses/possession.js";
+import dreamQuery from "./cognitiveSteps/dreamQuery.js";
 
 const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
   const { speak, log, dispatch  } = useActions()
@@ -8,6 +11,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
   const dreamTime = useSoulMemory("dreamTime", 0)
   const sleepCounter = useProcessMemory(0)
   const { wait } = useProcessManager()
+  const userWhispers = useSoulMemory("userWhispers", "")
 
   const psycheDescription = indentNicely`
   # Persona
@@ -27,7 +31,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
 
   if (invocationCount === 0) {
 
-  memory = memory.withMemory({
+  memory = memory.withRegion("core", {
     role: ChatMessageRoleEnum.System,
     content: soulBlueprint.current,
   });
@@ -42,28 +46,69 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
     sleepCounter.current += 1;
     log("Sleep counter:", sleepCounter.current)
 
-    const [withDialog, stream] = await externalDialog(
-      memory, "Talk to the user trying to gain their trust and learn about their inner world.", { stream: true, model: "exp/llama-v3-70b-instruct" }
-    );
-    dispatch({
-      action: "answers",
-      content: stream,
-      _metadata: {
-      }
-    });
+    if (invocationCount > 0) {
+      const [withIntuition, intuition] = await internalMonologue(memory, `${userWhispers.current}`, { model: "exp/llama-v3-70b-instruct" })
+      log("Intuition:", intuition)
 
-    dispatch({
-      action: "sleepCounter",
-      content: `${7 - sleepCounter.current} turns until dream state.`,
-      _metadata: {
-      }
-    });
-    
-    return withDialog;
-    
-  } else {
+      const [withDialog, stream] = await externalDialog(
+        withIntuition, 
+        "Talk to the user, trying to gain their trust and learn about their inner world.",
+        { stream: true, model: "exp/llama-v3-70b-instruct" }
+      );
+      dispatch({
+        action: "answers",
+        content: stream,
+        _metadata: {
+        }
+      });
+      
+      dispatch({
+        action: "sleepCounter",
+        content: `${7 - sleepCounter.current} turns until dream state.`,
+        _metadata: {
+        }
+      });
+
+    // If the user says "daimon" or "abracadabra", the daimon takes over
+    const [, castsASpell] = await dreamQuery(
+      memory,
+      `The user has said the word "daimon" or "abracadabra."`,
+      { model: "gpt-4-0125-preview" }
+    )
+
+    if (castsASpell) {
+      return [withDialog, possession]
+    }
+
+    return withDialog
+  }
+
+    else {
+      const [withDialog, stream] = await externalDialog(
+        memory, "Talk to the user, trying to gain their trust and learn about their inner world.", { stream: true, model: "exp/llama-v3-70b-instruct" }
+      );
+
+      dispatch({
+        action: "answers",
+        content: stream,
+        _metadata: {
+        }
+      });
+
+      dispatch({
+        action: "sleepCounter",
+        content: `${7 - sleepCounter.current} turns until dream state.`,
+        _metadata: {
+        }
+      });
+
+      return withDialog;
+    }
+   } 
+   
+  else {
     const [withDialog, stream] = await externalDialog(
-      memory, "Oh my god, I'm sorry, but I'm so tired. I need to log off now.", { stream: true, model: "gpt-4-0125-preview" }
+      memory, "Oh my god, I'm sorry, but I'm so tired. I need to log off now.", { stream: true, model: "exp/llama-v3-70b-instruct" }
     );
     dispatch({
       action: "answers",

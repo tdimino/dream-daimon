@@ -74,7 +74,7 @@ const dreamGenie = createCognitiveStep(({existingDream}: { existingDream?: strin
 
     const [, learnedSomethingNew] = await dreamQuery(
       step,
-      `The dream has been swayed by the user's last message, or the thoughts of ${step.soulName}.`,
+      `The dream has been swayed by the user's last message, or ${step.soulName} is approaching lucidity.`,
       { model: "gpt-4-0125-preview" }
     )
     log("Update dream?", learnedSomethingNew)

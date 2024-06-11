@@ -21,7 +21,7 @@ const soulSheds = createCognitiveStep(({existingModel}: { existingModel: string 
           ${existingModel}
   
           ## Description
-          Subtly alter the mind of ${name}, based on the dream that just transpired, the chat history before the dream, and her feelings toward other people like ${userName.current}. You may update the entire blueprint if need be.
+          Subtly alter the mind of ${name}, based on the dream that just transpired, the chat history before the dream, and her feelings toward other people like ${userName.current}. You may update her entire blueprint if need be, including her speaking style and the conversational scene.
           
           Please format the daimon's response so that it mirrors this **example blueprint**, albeit for ${name}:
 
@@ -50,6 +50,7 @@ const soulSheds = createCognitiveStep(({existingModel}: { existingModel: string 
     const soulBlueprint = useSoulMemory("soulBlueprint", "")
     const { speak, log, dispatch } = useActions()
     const { wait } = useProcessManager()
+    const dreamModel = useSoulMemory("dreamModel", "")
   
     let step = initialStep
     let finalStep = initialStep
@@ -134,6 +135,10 @@ dispatch({
     // Add any relevant metadata here
   }
 });
+
+    // Sam forgets her dream, resets model
+
+    dreamModel.current = "Unknown dream"
 
     return [finalStep, initialProcess]
   }

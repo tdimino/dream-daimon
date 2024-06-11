@@ -8,11 +8,12 @@ export default function SoulMessage({ content, messageType }: { content: string 
   const isThinking = messageType === 'thinks';
   const isConjuring = messageType === 'conjures';
   const isMurmuring = messageType === 'murmurs';
+  const isVoodooing = messageType === 'voodoo';
 
   return (
     <Message
-      name={isThinking ? "Daimonic whisper" : isConjuring ? "Dream Genie" : "Samantha"} 
-      avatarUrl={isThinking ? "/kathor.webp" : isConjuring ? "/dreamGenie.webp" : "/samantha.webp"}
+      name={isThinking ? "Daimonic whisper" : isConjuring ? "Dream Genie" : isMurmuring ? "Samantha's inner voice" : isVoodooing ? "Daimonic Samantha" : "Samantha"} 
+      avatarUrl={isThinking ? "/kathor.webp" : isConjuring ? "/dreamGenie.webp" : isMurmuring ? "/samantha.webp" : isVoodooing ? "/samantha.webp" : "/samantha.webp"}
     >
       {message.length ? (
         <div style={(isThinking || isConjuring || isMurmuring) ? { fontStyle: 'italic', color: '#707070'} : undefined}>

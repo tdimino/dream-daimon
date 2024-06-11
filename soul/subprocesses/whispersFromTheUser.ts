@@ -40,11 +40,12 @@ const influencedByTheUser: MentalProcess = async ({ workingMemory: initialStep }
   const { log, dispatch } = useActions()
   const dreamTime = useSoulMemory("dreamTime", 0)
   const { wait } = useProcessManager()
+  const possessed = useSoulMemory("possessed", false)
 
   let step = initialStep
   let finalStep = initialStep
 
-  if (dreamTime.current === 0) {
+  if (dreamTime.current === 0 && possessed.current !== true) {
     step = step.withMemory({
       role: ChatMessageRoleEnum.Assistant,
       content: indentNicely`
