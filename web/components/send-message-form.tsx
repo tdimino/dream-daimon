@@ -75,7 +75,7 @@ export default function SendMessageForm({
             type="text"
             value={customVerb}
             onChange={(e) => setCustomVerb(e.target.value)}
-            placeholder="muses"
+            placeholder="Muses"
             className="hidden sm:block text-primary font-medium custom-apricot p-2 rounded-2xl border-4 border-primary text-center text-lg h-14 shadow-[0px_4px_0px_#000] transition-transform [&:hover]:scale-110 [&:hover]:rotate-6 [&:focus]:scale-110 [&:focus]:rotate-6 focus-visible:outline-none [&:active]:shadow-none [&:active]:mt-1 [&:active]:-mb-1 w-16 sm:w-24 md:w-32"
           />
         )}
