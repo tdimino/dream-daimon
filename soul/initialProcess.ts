@@ -88,6 +88,13 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
     if (result) {
       psychoticCounter.current += 1;
       log(`Psychotic counter: ${psychoticCounter.current}`)
+
+      dispatch({
+        action: "psychoticCounter",
+        content: `${psychoticCounter.current}`,
+        _metadata: {
+        }
+      });
       return true;
     }
     return false;

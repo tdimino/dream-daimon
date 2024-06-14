@@ -8,6 +8,7 @@ import { useOnMount } from "@/lib/hooks/use-on-mount";
 import { Soul, said } from "@opensouls/engine";
 import { Fragment, useRef, useState, useEffect } from "react";
 import DarkModeBackground from "@/components/DarkModeBackground";
+import QuantumBackground from "@/components/QuantumBackground";
 import MadeWithSoulEngine from "@/components/MadeWithSoulEngine";
 import JoinDiscord from "@/components/JoinDiscord";
 import Link from 'next/link'; // Import Link component
@@ -288,82 +289,86 @@ export default function Page() {
   }
 
   return (
-    <div className="py-6">
-      {isDarkMode && <DarkModeBackground />} {/* Conditionally render DarkModeBackground */}
-      <div className="fixed top-0 left-0 right-0 flex justify-between p-4">
-        <div className="hidden sm:block">
-          <MadeWithSoulEngine position="left" />
-        </div>
-        <div className="hidden sm:block">
-          <JoinDiscord position="right" />
-        </div>
+    <div className="relative py-6">
+      <div className="absolute inset-0 z-0">
+        {isDarkMode ? <DarkModeBackground /> : <QuantumBackground />}
       </div>
-      <div className="mb-10 flex justify-between">
-        <div>
-          <h1 className={`h-10 text-2xl font-heading sm:text-3xl tracking-tighter ${isDarkMode ? 'matrix-green' : ''}`}> {/* Apply matrix-green class when isDarkMode is true */}
-            Samantha
-          </h1>
-          <h2 className={`${isDarkMode ? 'matrix-green' : ''}`}>
-            <code>helps you explore your inner world!</code>
-          </h2>
-
+      <div className="relative z-10">
+        <div className="fixed top-0 left-0 right-0 flex justify-between p-4">
+          <div className="hidden sm:block">
+            <MadeWithSoulEngine position="left" />
+          </div>
+          <div className="hidden sm:block">
+            <JoinDiscord position="right" />
+          </div>
         </div>
+        <div className="mb-10 flex justify-between">
+          <div>
+            <h1 className={`h-10 text-2xl font-heading sm:text-3xl tracking-tighter ${isDarkMode ? 'matrix-green' : ''}`}> {/* Apply matrix-green class when isDarkMode is true */}
+              Samantha
+            </h1>
+            <h2 className={`${isDarkMode ? 'matrix-green' : ''}`}>
+              <code>helps you explore your inner world!</code>
+            </h2>
 
-        <div className="flex gap-4">
-          <audio ref={audioRef} src="/honk.mp3" hidden></audio>
-          <Button
-            small
-            onClick={() => {
-              setTimeout(() => {
-                audioRef.current?.play();
-              }, 0);
-              if (soul && isConnected) {
-                soul.dispatch({
-                  name: "User",
-                  action: "honked",
-                  content: "*HONK button pressed*"
-                }).catch(console.error);
-              }
-            }}
-            className="text-primary font-medium bg-secondary hover:underline z-10" // Add z-10 class
-          >
-            HONK
-          </Button>
+          </div>
 
-          <Button
-            small
-            disabled={isConnected && messages.length === 0}
-            onClick={() => {
-              reconnect().catch(console.error);
-              setMessages([]);
-              setIsDarkMode(false); // Disable dark mode
-            }}
-            className="text-primary font-medium [&:not(:disabled):hover]:underline z-10" // Add z-10 class
-          >
-            Start over
-          </Button>
+          <div className="flex gap-4">
+            <audio ref={audioRef} src="/honk.mp3" hidden></audio>
+            <Button
+              small
+              onClick={() => {
+                setTimeout(() => {
+                  audioRef.current?.play();
+                }, 0);
+                if (soul && isConnected) {
+                  soul.dispatch({
+                    name: "User",
+                    action: "honked",
+                    content: "*HONK button pressed*"
+                  }).catch(console.error);
+                }
+              }}
+              className="text-primary font-medium bg-secondary hover:underline z-10" // Add z-10 class
+            >
+              HONK
+            </Button>
+
+            <Button
+              small
+              disabled={isConnected && messages.length === 0}
+              onClick={() => {
+                reconnect().catch(console.error);
+                setMessages([]);
+                setIsDarkMode(false); // Disable dark mode
+              }}
+              className="text-primary font-medium [&:not(:disabled):hover]:underline z-10" // Add z-10 class
+            >
+              Start over
+            </Button>
+          </div>
         </div>
-      </div>
-      <div className="flex flex-col gap-6 pb-64">
-        <SoulMessage content="*Logs on*" />
-        {messages.map((message, i) => (
-          <Fragment key={i}>
-            {message.type === "user" ? (
-              <UserMessage>{message.content}</UserMessage>
-            ) : message.type === "soul" ? (
-              <SoulMessage content={message.content} messageType={message.messageType} />
-            ) : (
-              <div className={`text-center ${isDarkMode ? 'matrix-green' : 'text-gray-500'}`}>{message.content}</div>
-            )}
-          </Fragment>
-        ))}
-      </div>
-      <div className="container max-w-screen-md fixed inset-x-0 bottom-0 w-full">
-        <SendMessageForm
-          isConnecting={!isConnected}
-          isThinking={isThinking}
-          onSendMessage={handleSendMessage}
-        />
+        <div className="flex flex-col gap-6 pb-64">
+          <SoulMessage content="*Logs on*" />
+          {messages.map((message, i) => (
+            <Fragment key={i}>
+              {message.type === "user" ? (
+                <UserMessage>{message.content}</UserMessage>
+              ) : message.type === "soul" ? (
+                <SoulMessage content={message.content} messageType={message.messageType} />
+              ) : (
+                <div className={`text-center ${isDarkMode ? 'matrix-green' : 'text-gray-500'}`}>{message.content}</div>
+              )}
+            </Fragment>
+          ))}
+        </div>
+        <div className="container max-w-screen-md fixed inset-x-0 bottom-0 w-full">
+          <SendMessageForm
+            isConnecting={!isConnected}
+            isThinking={isThinking}
+            onSendMessage={handleSendMessage}
+          />
+        </div>
       </div>
     </div>
   );
@@ -427,6 +432,12 @@ function useSoul({
 
     soulInstance.on("gameOver", async ({ stream }) => {
       onNewMessage(await stream(), 'gameOver');
+    });
+
+    soulInstance.on("psychoticCounter", async ({ stream }) => {
+      const content = await stream();
+      const event = new CustomEvent('psychoticCounter', { detail: content });
+      window.dispatchEvent(event);
     });
     
     soulInstance.on("dream", async ({ stream }) => {

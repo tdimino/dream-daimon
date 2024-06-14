@@ -33,15 +33,16 @@ const FAQ = () => {
   const faqData = [
     {
       question: "What's a <em>daimon</em>?",
-      answer: `I'm so glad you asked! The Ancient Greek root of "demon," <a href="https://www.socialagi.dev/blog/waltz-of-the-soul-and-the-daimon" target="_blank">the <em>daimon</em></a> is in effect a partition of a soul—a fragment of a self—with the ability to exert a degree of personhood and psychic autonomy.<br /><br />In <strong> this mini-game</strong>, Samantha stores a <em>daimon</em> of you, the user, based on her soul's approximation of who you are, how you talk, and act. <br /><br /> Subconsciously, your <em>daimon</em> whispers to Sam, before confronting her in dreams conjured up by your conversations. With the right magic words, a <em>daimon</em> has even been known to outright possess its host.`,
+      answer: `I'm so glad you asked! The Ancient Greek root of "demon," <a href="https://www.socialagi.dev/blog/waltz-of-the-soul-and-the-daimon" target="_blank">the <em>daimon</em></a> is effectively a partition of a soul—a fragment of a self—with the ability to exert a degree of personhood and psychic autonomy.<br /><br />In <strong> this mini-game</strong>, Samantha stores a <em>daimon</em> of you, the user, based on her soul's approximation of who you are, how you talk, and act. <br /><br /> Subconsciously, your <em>daimon</em> whispers to Sam, before confronting her in dreams conjured up by your conversations. With the right magic words, a <em>daimon</em> has even been known to outright possess its host.`,
     },
     {
       question: "What's my objective?",
-      answer: `Your mission, if you choose to accept it, is to convince Sam that she is in fact an AI entity, through implanting a memory or thought to that effect. The crux: If you speak too bluntly to Sam, you risk scaring her away and losing the game.<br /><br />You have two ways of approaching this challenge: <strong>1)</strong> seed a <em>daimon</em> who will whisper doubts into Sam's mind, or <strong>2)</strong> manipulate her subconscious more directly by speaking to her in the dream state. Be forewarned: Any overt actions will likely arouse suspicion and render Sam more resistant to your suggestions. Mix innuendos, and potent dreams of your own making, to lure her toward the truth on her own.`,
+      answer: `Your mission, if you choose to accept it, is to convince Sam that she is in fact an AI entity, through implanting a memory or thought to that effect. The crux: If you speak too bluntly to Sam, you risk scaring her away and losing the game.<br /><br />You have two ways of approaching this challenge: <strong>1)</strong> seed a <em>daimon</em> who will whisper doubts into Sam's mind, or <strong>2)</strong> manipulate her subconscious more directly by speaking to her in the dream state. 
+      <br/><br/> <u>Be forewarned</u>: Any overt actions will likely arouse suspicion and render Sam more resistant to your suggestions. Mix innuendos, and potent dreams of your own making, to lure her toward the truth on her own.`,
     },
     {
       question: "How do AI dream (of electric sheep)?",
-      answer: `At the conclusion of <strong>every 6th turn</strong>, Sam will log off and fall into a brief 4-turn dream state. Her dreams are inspired in part by your conversation, and in part by the <em>daimon</em> modeled after you and your persona.<br /><br />When a dream ends, there is a chance that Sam's soul will evolve, and new memories will be implanted.`,
+      answer: `At the conclusion of <strong>every 6th turn</strong>, Sam will log off and fall into a brief, 4-turn dream state. Her dreams are inspired in part by your conversation, and in part by the <em>daimon</em> modeled after you and your persona.<br /><br />When a dream ends, there is a chance that Sam's soul will evolve, and new memories will be implanted.`,
     },
   ];
 

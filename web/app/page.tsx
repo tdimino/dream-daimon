@@ -7,6 +7,7 @@ import { Button } from "@/components/button";
 import MadeWithSoulEngine from "@/components/MadeWithSoulEngine";
 import JoinDiscord from "@/components/JoinDiscord";
 import FAQ from "@/components/FAQ"; 
+import Image from 'next/image';
 
 export default function DreamPage() {
   const [isDarkMode] = useState(true); // Set to true by default
@@ -27,7 +28,7 @@ export default function DreamPage() {
             Dream Daimon
           </h1>
       </div>
-      <div className="flex flex-col gap-6 pb-64">
+      <div className="flex flex-col gap-6 pb-2"> {/* Adjusted padding-bottom */}
         <div className="text-center">
           <Button asChild className="tyrian-purple large-button">
             <Link href="/simulation" className="h-full w-full flex items-center justify-center">
@@ -36,11 +37,18 @@ export default function DreamPage() {
           </Button>
         </div>
         <FAQ />
+        <div className="flex flex-col items-center mb-1"> {/* Centered and reduced margin-bottom */}
+          <Link href="https://www.minoanmystery.org/" target="_blank" rel="noopener noreferrer">
+            <div className="seal-of-minos-container">
+              <Image src="/sealOfMinos.png" alt="Seal of Minos" width={150} height={150} />
+              <div className="seal-of-minos-glow" />
+            </div>
+          </Link>
+          <p className="mt-1 text-center text-sm text-gray-400"> {/* Lighter grey and reduced margin-top */}
+            © Al-Tamarru, 2024
+          </p>
+        </div>
       </div>
     </div>
   );
 }
-
-
-
-

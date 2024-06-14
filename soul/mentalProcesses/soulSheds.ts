@@ -130,46 +130,53 @@ const soulSheds = createCognitiveStep(({existingModel}: { existingModel: string 
 
       if (psychoticCounter.current > 3) {
       psychoticCounter.current -= 2
+
+      dispatch({
+        action: "psychoticCounter",
+        content: `${psychoticCounter.current}`,
+        _metadata: {
+        }
+      });
       }
 
 }
 
 // Samantha begins to wake up
 
-dispatch({
-  action: "wakes",
-  content: "Exiting dream state...",
-  _metadata: {
-  }
-});
+    dispatch({
+      action: "wakes",
+      content: "Exiting dream state...",
+      _metadata: {
+      }
+    });
 
-await wait(2000)
+    await wait(2000)
 
-const [,recollection] = await internalMonologue(
-    step, 
-    {
-    instructions: "Recall faint fragments of your most recent dream—what you saw, thought you said, and felt throughout it.", 
-    verb: "recalls",
-    },
-    { model: "exp/llama-v3-70b-instruct" }
-);
-log("Recalls:", recollection)
+    const [,recollection] = await internalMonologue(
+        step, 
+        {
+        instructions: "Recall faint fragments of your most recent dream—what you saw, thought you said, and felt throughout it.", 
+        verb: "recalls",
+        },
+        { model: "exp/llama-v3-70b-instruct" }
+    );
+    log("Recalls:", recollection)
 
-let stream
-[finalStep, stream] = await externalDialog(
-    step, 
-    {
-    instructions: "Apologize for your narcolepsy, and briefly mention what you can recall about the weird dream you just had.", 
-    verb: "yawns",
-    },
-    { stream: true, model: "gpt-4-0125-preview" }
-);
-dispatch({
-  action: "answers",
-  content: stream,
-  _metadata: {
-  }
-});
+    let stream
+    [finalStep, stream] = await externalDialog(
+        step, 
+        {
+        instructions: "Apologize for your narcolepsy, and briefly mention what you can recall about the weird dream you just had.", 
+        verb: "yawns",
+        },
+        { stream: true, model: "gpt-4-0125-preview" }
+    );
+    dispatch({
+      action: "answers",
+      content: stream,
+      _metadata: {
+      }
+    });
 
 // Sam forgets her dream, resets the model
 
