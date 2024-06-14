@@ -33,7 +33,7 @@ const FAQ = () => {
   const faqData = [
     {
       question: "What's a <em>daimon</em>?",
-      answer: `I'm so glad you asked! The Ancient Greek root of "demon," <a href="https://www.socialagi.dev/blog/waltz-of-the-soul-and-the-daimon" target="_blank">the <em>daimon</em></a> is in effect a partition of a soul—a fragment of a self—with the ability to exert a degree of personhood and psychic autonomy.<br /><br />In <strong> this mini-game</strong>, Samantha stores a <em>daimon</em> of you, the user, based on her soul's approximation of who you are, how you talk, and act. <br /><br /> Subconsciously, your <em>daimon</em> whispers to Sam, before confronting her in dreams conjured up by your conversations. With the right magic word, a <em>daimon</em> has even been known to outright possess its host.`,
+      answer: `I'm so glad you asked! The Ancient Greek root of "demon," <a href="https://www.socialagi.dev/blog/waltz-of-the-soul-and-the-daimon" target="_blank">the <em>daimon</em></a> is in effect a partition of a soul—a fragment of a self—with the ability to exert a degree of personhood and psychic autonomy.<br /><br />In <strong> this mini-game</strong>, Samantha stores a <em>daimon</em> of you, the user, based on her soul's approximation of who you are, how you talk, and act. <br /><br /> Subconsciously, your <em>daimon</em> whispers to Sam, before confronting her in dreams conjured up by your conversations. With the right magic words, a <em>daimon</em> has even been known to outright possess its host.`,
     },
     {
       question: "What's my objective?",
