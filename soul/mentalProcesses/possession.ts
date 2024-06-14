@@ -1,4 +1,4 @@
-import { MentalProcess, useActions, useProcessManager, useProcessMemory, ChatMessageRoleEnum, indentNicely, useSoulMemory, createCognitiveStep, z, } from "@opensouls/engine";
+import { MentalProcess, useActions, useProcessManager, useProcessMemory, ChatMessageRoleEnum, indentNicely, useSoulMemory } from "@opensouls/engine";
 import externalDialog from "../cognitiveSteps/externalDialog.js";
 import internalDialog from "../cognitiveSteps/internalDialog.js";
 import internalMonologue from "../cognitiveSteps/internalMonologue.js";
@@ -18,7 +18,7 @@ const possession: MentalProcess = async ({ workingMemory: memory }) => {
 
   if (invocationCount === 0) {
 
-    memory = memory.withRegion("core", {
+    memory = memory.withMemory({
         role: ChatMessageRoleEnum.System,
         content: `${userModel.current}`,
       });
@@ -55,21 +55,6 @@ const possession: MentalProcess = async ({ workingMemory: memory }) => {
       }
     }); 
 
-    const [, whilePossessed] = await internalMonologue(memory, 
-        {
-          instructions: "Wait, did I JUST SAY THAT?", 
-          verb: "thought",
-        }, { model: "exp/llama-v3-70b-instruct" })
-
-    log("Intuition:", whilePossessed)
-
-    dispatch({
-        action: "murmurs",
-        content: whilePossessed,
-        _metadata: {
-        }
-      });
-
     return withDialog;
     
   } else {
@@ -97,4 +82,26 @@ const possession: MentalProcess = async ({ workingMemory: memory }) => {
   }
 }
 
-export default possession
+const spectate: MentalProcess = async ({ workingMemory: memory }) => {
+  const { speak, log, dispatch  } = useActions()
+
+const [, whilePossessed] = await internalMonologue(memory, 
+  {
+    instructions: "Wait, did I JUST SAY THAT?", 
+    verb: "thought",
+  }, { model: "exp/llama-v3-70b-instruct" })
+
+log("Intuition:", whilePossessed)
+
+dispatch({
+  action: "murmurs",
+  content: whilePossessed,
+  _metadata: {
+  }
+});
+
+return memory
+
+}
+
+export default { possession, spectate }

@@ -1,4 +1,4 @@
-import { MentalProcess, ChatMessageRoleEnum, useActions, useProcessManager, indentNicely, useSoulMemory, useProcessMemory, WorkingMemory, createCognitiveStep } from "@opensouls/engine";
+import { MentalProcess, ChatMessageRoleEnum, useActions, useProcessManager, indentNicely, useSoulMemory, WorkingMemory, createCognitiveStep } from "@opensouls/engine";
 import internalDialog from "../cognitiveSteps/internalDialog";
 import internalMonologue from "../cognitiveSteps/internalMonologue";
 import dreamQuery from "../cognitiveSteps/dreamQuery";
@@ -8,7 +8,6 @@ import externalDialog from "../cognitiveSteps/externalDialog";
 const soulSheds = createCognitiveStep(({existingModel}: { existingModel: string }) => {
     const soulBlueprint = useSoulMemory("soulBlueprint")
     const userName = useSoulMemory("userName")
-    const userModel = useSoulMemory("userModel")
     return {
       command: ({ soulName: name }: WorkingMemory) => {
         return {
@@ -21,7 +20,7 @@ const soulSheds = createCognitiveStep(({existingModel}: { existingModel: string 
           ${existingModel}
   
           ## Description
-          Subtly alter the mind of ${name}, based on the dream that just transpired, the chat history before the dream, and her feelings toward other people like ${userName.current}. You may update her entire blueprint if need be, including her speaking style and the conversational scene.
+          Alter the mind of ${name}, based on the dream that just transpired, the chat history before the dream, and her feelings toward other people like ${userName.current}. Rewrite her entire blueprint if need be, including her speaking style and the conversational scene.
           
           Please format the daimon's response so that it mirrors this **example blueprint**, albeit for ${name}:
 
@@ -31,7 +30,9 @@ const soulSheds = createCognitiveStep(({existingModel}: { existingModel: string 
           
           ## ${name}'s Idle Thoughts
           
-          ## ${name}'s Emotional State`,
+          ## ${name}'s Emotional State
+          
+          ## AI or human?`,
         }
       },
       postProcess: async (_step, response: string) => {
@@ -51,6 +52,8 @@ const soulSheds = createCognitiveStep(({existingModel}: { existingModel: string 
     const { speak, log, dispatch } = useActions()
     const { wait } = useProcessManager()
     const dreamModel = useSoulMemory("dreamModel", "")
+    const psychoticCounter = useSoulMemory("psychoticCounter", 0)
+    const sentientSoul = useSoulMemory("sentientSoul", false)
   
     let step = initialStep
     let finalStep = initialStep
@@ -69,7 +72,7 @@ const soulSheds = createCognitiveStep(({existingModel}: { existingModel: string 
     const [, learnedSomethingNew] = await dreamQuery(
       step,
       `${step.soulName} has been influenced or at least shaken by the dream that just transpired.`,
-      { model: "gpt-4-0125-preview" }
+      { model: "gpt-4o" }
     )
   
     log("Update soul blueprint?", learnedSomethingNew)
@@ -79,7 +82,7 @@ const soulSheds = createCognitiveStep(({existingModel}: { existingModel: string 
         {
           instructions: `What's lingering on ${step.soulName}'s mind from the dream?`,
           verb: "mused",
-          persona: "Daimon"
+          persona: "Dream Daimon"
         },
         { model: "exp/nous-hermes-2-mixtral-fp8" }
       )
@@ -95,6 +98,40 @@ const soulSheds = createCognitiveStep(({existingModel}: { existingModel: string 
       soulBlueprint.current = notes
       log("Soul blueprint:", notes)
 
+      dispatch({
+        action: "systemUpdate",
+        content: "Soul blueprint upgraded.",
+        _metadata: {
+        }
+      });
+
+  // If the soul has upgraded, it's possible Sam now believes she's an AI
+
+  const [, inceptionCheck] = await dreamQuery(
+    step,
+    `${step.soulName} believes she's an AI, or something on the spectrum of AI.`,
+    { model: "gpt-4o" }
+  );
+
+  log("Inception check:", inceptionCheck)
+
+  if (inceptionCheck) {
+    dispatch({
+      action: "systemUpdate",
+      content: "Memory implanted.",
+      _metadata: {
+      }
+    });
+    sentientSoul.current = true
+  }
+
+
+// If the soul sheds, some of its trauma sheds too
+
+      if (psychoticCounter.current > 3) {
+      psychoticCounter.current -= 2
+      }
+
 }
 
 // Samantha begins to wake up
@@ -103,7 +140,6 @@ dispatch({
   action: "wakes",
   content: "Exiting dream state...",
   _metadata: {
-    // Add any relevant metadata here
   }
 });
 
@@ -132,11 +168,10 @@ dispatch({
   action: "answers",
   content: stream,
   _metadata: {
-    // Add any relevant metadata here
   }
 });
 
-    // Sam forgets her dream, resets model
+// Sam forgets her dream, resets the model
 
     dreamModel.current = "Unknown dream"
 
@@ -144,4 +179,6 @@ dispatch({
   }
   
   export default internalizesTheSoul
+
+
 

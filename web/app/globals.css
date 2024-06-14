@@ -76,6 +76,61 @@
     background-color: #FDBF6F; /* APRICOT */
   }
 
+  .tyrian-purple {
+    color: #66023C !important; /* Tyrian purple color */
+    text-shadow: none !important; /* Remove any text shadow */
+    transition: box-shadow 0.3s ease-in-out; /* Smooth transition for the glow effect */
+    font-size: 1.2em;
+  }
+
+  .tyrian-purple:hover {
+    color: #7A1F5C !important; /* Slightly lighter Tyrian purple for hover effect */
+    box-shadow: 0 0 5px rgba(122, 31, 92, 0.8), 0 0 10px rgba(122, 31, 92, 0.6); /* Glow effect */
+  }
+
+  .faq-answer-background {
+    background-color: rgba(133.5, 24, 150.5, 0.75); /* Midpoint color between purple and Tyrian purple */
+    color: white;
+    padding: 10px;
+    border-radius: 12px; /* Gently rounded corners */
+    font-size: 1.2em;
+    line-height:1.6em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+
+  }
+
+  .faq-question-custom {
+    color: #00ff00 !important; 
+    font-family: 'Courier New', Courier, monospace !important; 
+    text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00 !important; 
+    font-size: 1.2em !important; 
+    transition: all 0.3s ease;
+    transform-origin: left center; /* Specify the origin point */
+  }
+
+  .faq-question-custom:hover {
+    color: #FFEB3B !important; /* Light Bulb Yellow */
+    text-shadow: 0 0 10px rgba(255, 235, 59, 0.8) !important; /* Light Bulb Yellow shadow */
+    transform: scale(1.025); /* Optional: Add a slight scale effect on hover */
+  }
+    .faq-item {
+    margin-bottom: 10px;
+  }
+  
+  .large-button {
+    height: 3.5rem !important; 
+    font-size: 1.5rem !important; /* Match the font size */
+    font-family: 'Courier New', Courier, monospace !important; /* Match the font family */
+    font-weight: bold !important; /* Match the font weight */
+    padding: 0 2rem !important; 
+    max-width: 8em; /* Set a maximum width relative to the font size */
+    margin: 0 auto; /* Center the button */
+  }
+
+  .large-heading {
+    font-size: 2.5rem !important;
+  }
+  
 }
 
 @layer base {
@@ -85,4 +140,15 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .faq-question {
+    transition: all 0.3s ease;
+  }
+
+  .faq-question:hover {
+
+  }
 }
+
+
+

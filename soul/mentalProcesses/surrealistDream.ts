@@ -1,4 +1,4 @@
-import { MentalProcess, ChatMessageRoleEnum, useActions, useProcessManager, indentNicely, useSoulMemory, useProcessMemory, WorkingMemory, createCognitiveStep } from "@opensouls/engine";
+import { MentalProcess, ChatMessageRoleEnum, useActions, useProcessManager, indentNicely, useSoulMemory, useProcessMemory } from "@opensouls/engine";
 import internalDialog from "../cognitiveSteps/internalDialog";
 import internalMonologue from "../cognitiveSteps/internalMonologue";
 import decision from "../cognitiveSteps/decision";
@@ -15,14 +15,13 @@ import soulSheds from "../mentalProcesses/soulSheds";
     const melatoninCounter = useProcessMemory(0)
     const { wait } = useProcessManager()
     const { invocationCount } = useProcessManager()
-    const selectedScene = useProcessMemory("selectedScene")
+// const selectedScene = useProcessMemory("selectedScene")
 
     let step = initialStep
     let finalStep = initialStep
     let stream
 
-    step = step.withMemory(
-        {
+    step = step.withMemory({
         role: ChatMessageRoleEnum.System,
         content: `${step.soulName} finds herself in this ${dreamModel.current}, although she's unaware that she's dreaming, or even who she is. Subsequent messages from the user should be interpreted as external stimuli filtering into the dream and your responses should distort, reinterpret, and weave the content of the messages into an illogical, surreal dream narrative that flows from one topic to the next based on conceptual associations rather than literal meaning or intent.`
     })
@@ -56,7 +55,6 @@ if (melatoninCounter.current < 4) {
         action: "murmurs",
         content: feeling,
         _metadata: {
-          // Add any relevant metadata here
         }
       });
 
@@ -96,7 +94,6 @@ if (melatoninCounter.current < 4) {
         action: "conjures",
         content: stream,
         _metadata: {
-          // Add any relevant metadata here
         }
       });
 
@@ -121,7 +118,6 @@ if (melatoninCounter.current < 4) {
             action: "murmurs",
             content: stream,
             _metadata: {
-              // Add any relevant metadata here
             }
           });
     } else {
@@ -138,7 +134,6 @@ if (melatoninCounter.current < 4) {
             action: "thinks",
             content: stream,
             _metadata: {
-              // Add any relevant metadata here
             }
           });
     }
@@ -164,7 +159,6 @@ if (melatoninCounter.current < 4) {
             action: "thinks",
             content: stream,
             _metadata: {
-              // Add any relevant metadata here
             }
           });
 
@@ -181,7 +175,6 @@ if (melatoninCounter.current < 4) {
             action: "murmurs",
             content: stream,
             _metadata: {
-              // Add any relevant metadata here
             }
           });
     }

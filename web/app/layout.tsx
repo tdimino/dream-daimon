@@ -7,7 +7,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Samantha Daimon",
+  title: "Dream Daimon",
   description: "helps you explore your inner world!",
 };
 

@@ -41,11 +41,12 @@ const influencedByTheUser: MentalProcess = async ({ workingMemory: initialStep }
   const dreamTime = useSoulMemory("dreamTime", 0)
   const { wait } = useProcessManager()
   const possessed = useSoulMemory("possessed", false)
+  const psychoticCounter = useSoulMemory("psychoticCounter", 0);
 
   let step = initialStep
   let finalStep = initialStep
 
-  if (dreamTime.current === 0 && possessed.current !== true) {
+  if (dreamTime.current === 0 && possessed.current !== true && psychoticCounter.current < 6) {
     step = step.withMemory({
       role: ChatMessageRoleEnum.Assistant,
       content: indentNicely`
@@ -76,7 +77,6 @@ const influencedByTheUser: MentalProcess = async ({ workingMemory: initialStep }
       action: "thinks",
       content: stream,
       _metadata: {
-        // Add any relevant metadata here
       }
     });
 

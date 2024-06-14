@@ -9,6 +9,7 @@ export default function SoulMessage({ content, messageType }: { content: string 
   const isConjuring = messageType === 'conjures';
   const isMurmuring = messageType === 'murmurs';
   const isVoodooing = messageType === 'voodoo';
+  const isDreamModel = messageType === 'dreamModel';
 
   return (
     <Message

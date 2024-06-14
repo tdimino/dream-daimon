@@ -20,7 +20,7 @@ const dreamGenie = createCognitiveStep(({existingDream}: { existingDream?: strin
             ${name} should encounter ${userName.current} in the dream in different locales, with scenes bleeding into each other.
 
             ### Structure
-            Break the dream up into 3-4 scenes. 
+            Break the dream up into 3-4 scenes.
 
             ### Style
             Use surrealist techniques to create a dream that is both visually and narratively compelling.
@@ -64,6 +64,13 @@ const dreamGenie = createCognitiveStep(({existingDream}: { existingDream?: strin
         );
         dreamModel.current = alchemy;
         log("Dream model:", dreamModel.current);
+
+        dispatch({
+          action: "dreamModel",
+          content: dreamModel.current,
+          _metadata: {
+          }
+        });
   
         return finalStep;
       }
@@ -74,7 +81,7 @@ const dreamGenie = createCognitiveStep(({existingDream}: { existingDream?: strin
 
     const [, learnedSomethingNew] = await dreamQuery(
       step,
-      `The dream has been swayed by the user's last message, or ${step.soulName} is approaching lucidity.`,
+      `The dream has been altered by the user's last message, or ${step.soulName}'s thoughts.`,
       { model: "gpt-4-0125-preview" }
     )
     log("Update dream?", learnedSomethingNew)
@@ -90,13 +97,6 @@ const dreamGenie = createCognitiveStep(({existingDream}: { existingDream?: strin
       )
       log("Dream updates:", dreamUpdate)
 
-      dispatch({
-        action: "sleepCounter",
-        content: `Dream alteration detected.`,
-        _metadata: {
-        }
-      });
-
       const [, alchemy] = await dreamGenie(
         step, 
         {
@@ -106,6 +106,20 @@ const dreamGenie = createCognitiveStep(({existingDream}: { existingDream?: strin
       );
       dreamModel.current = alchemy;
       log("Dream model:", dreamModel.current);
+
+      dispatch({
+        action: "systemUpdate",
+        content: `Dream alteration detected.`,
+        _metadata: {
+        }
+      });
+
+      dispatch({
+        action: "dreamModel",
+        content: dreamModel.current,
+        _metadata: {
+        }
+      });
 
       return finalStep;
     }
