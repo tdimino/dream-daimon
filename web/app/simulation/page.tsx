@@ -129,6 +129,11 @@ export default function Page() {
           window.dispatchEvent(event);
         }
 
+        else if (type === 'gameOver') {
+          setIsThinking(false);
+          console.log("Game over");
+        }
+
         if (audioUrl && type !== 'sleepCounter' && type !== 'systemUpdate') {
           playAudio(audioUrl);
         }
@@ -347,6 +352,10 @@ export default function Page() {
                 reconnect().catch(console.error);
                 setMessages([]);
                 setIsDarkMode(false); // Disable dark mode
+
+                const number = 1;
+                const event = new CustomEvent('psychoticCounter', { detail: number });
+                window.dispatchEvent(event);
               }}
               className="text-primary font-medium [&:not(:disabled):hover]:underline z-10" // Add z-10 class
             >

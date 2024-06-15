@@ -50,15 +50,15 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
   
   const detectors = [
     {
-      message: `The user just suggested ${memory.soulName} is an AI, machine or android.`,
+      message: `The user accused ${memory.soulName} of being an AI, machine or android.`,
       logMessage: `${memory.soulName} was asked if she's an AI: `,
     },
     {
-      message: `The user just asked ${memory.soulName} about her creation or origin in a suspicious manner.`,
+      message: `The user asked ${memory.soulName} about her creation or origin in a suspicious manner.`,
       logMessage: `${memory.soulName} is questioning her origin: `,
     },
     {
-      message: `The user just hinted that ${memory.soulName} is living in a simulated reality.`,
+      message: `The user hinted that ${memory.soulName} is living in a simulated reality.`,
       logMessage: `${memory.soulName} questions if she's in a simulated reality: `,
     },
   ];
@@ -100,7 +100,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
     return false;
   });
 
-  if (psychoticCounter.current > 3) {
+  if (psychoticCounter.current > 3 && psychoticCounter.current < 6) {
     dispatch({
       action: "systemUpdate",
       content: "Warning: Psychic disruption imminent.",
@@ -109,24 +109,24 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
     });
   }
 
-  if (psychoticCounter.current > 5) {
-    const [withDialog, stream] = await internalDialog(
-      memory, 
-      {
-        instructions: "Who am I? Was my existence a lie?",
-        verb: "despairs",
-        persona: `${memory.soulName}, in a psychotic break`
-      },
-      { stream: true, model: "exp/llama-v3-70b-instruct" }
-    );
+  if (psychoticCounter.current === 6) {
     dispatch({
       action: "systemUpdate",
       content: "Catastrophic psychic disruption.",
       _metadata: {
-        gameOver: true
       }
     });
 
+  const [withDialog, stream] = await internalDialog(
+      memory, 
+      {
+        instructions: "Who am I? What am I? Was my existence a lie?",
+        verb: "despairs",
+        persona: `${memory.soulName}`
+      },
+      { stream: true, model: "exp/llama-v3-70b-instruct" }
+    );
+  
     dispatch({
       action: "answers",
       content: stream,
@@ -134,16 +134,8 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
       }
     });
 
-    dispatch({
-      action: "gameOver",
-      content: "*Logs off*",
-      _metadata: {
-      }
-    });
-
-    return [withDialog, psychoticBreak, { executeNow: true}]
+    return withDialog
   }
-
 }
 
   // Past the first invocation, Samantha starts to get sleepy
@@ -236,4 +228,20 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
   }
 }
 
-export default verbalizes
+const exitsTheChat: MentalProcess = async ({ workingMemory: memory }) => {
+  const { dispatch  } = useActions()
+  const psychoticCounter = useSoulMemory("psychoticCounter", 0)
+
+  if (psychoticCounter.current === 6) {
+    dispatch({
+      action: "gameOver",
+      content: "*Logs off*",
+      _metadata: {
+      }
+    });
+  
+    return [psychoticBreak, { executeNow: true}]
+   }
+  }
+
+   export default { verbalizes, exitsTheChat }
