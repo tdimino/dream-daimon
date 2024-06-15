@@ -138,7 +138,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
       const [withDialog, stream] = await externalDialog(
         withIntuition, 
         "Talk to the user, trying to gain their trust and learn about their inner world.",
-        { stream: true, model: "exp/llama-v3-70b-instruct" }
+        { stream: true, model: "gpt-4-0125-preview" }
       );
       dispatch({
         action: "answers",
@@ -170,7 +170,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
 
     else {
       const [withDialog, stream] = await externalDialog(
-        memory, "Talk to the user, trying to gain their trust and learn about their inner world.", { stream: true, model: "exp/llama-v3-70b-instruct" }
+        memory, "Talk to the user, trying to gain their trust and learn about their inner world.", { stream: true, model: "gpt-4-0125-preview" }
       );
 
       dispatch({

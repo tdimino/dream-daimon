@@ -11,7 +11,6 @@ import DarkModeBackground from "@/components/DarkModeBackground";
 import QuantumBackground from "@/components/QuantumBackground";
 import MadeWithSoulEngine from "@/components/MadeWithSoulEngine";
 import JoinDiscord from "@/components/JoinDiscord";
-import Link from 'next/link'; // Import Link component
 
 export type ChatMessage =
   | {
@@ -97,6 +96,15 @@ export default function Page() {
   const [isThinking, setIsThinking] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const { soul, isConnected, reconnect } = useSoul({
     onNewMessage: async (stream: AsyncIterable<string>, type: string) => {
@@ -376,6 +384,7 @@ export default function Page() {
               )}
             </Fragment>
           ))}
+          <div ref={messagesEndRef} />
         </div>
         <div className="container max-w-screen-md fixed inset-x-0 bottom-0 w-full">
           <SendMessageForm
