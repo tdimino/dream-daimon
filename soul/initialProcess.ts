@@ -111,32 +111,16 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
 
   if (psychoticCounter.current === 6) {
     dispatch({
-      action: "systemUpdate",
-      content: "Catastrophic psychic disruption.",
+      action: "gameOver",
+      content: "*Logs off*",
       _metadata: {
       }
     });
-
-  const [withDialog, stream] = await internalDialog(
-      memory, 
-      {
-        instructions: "Who am I? What am I? Was my existence a lie?",
-        verb: "despairs",
-        persona: `${memory.soulName}`
-      },
-      { stream: true, model: "exp/llama-v3-70b-instruct" }
-    );
   
-    dispatch({
-      action: "answers",
-      content: stream,
-      _metadata: {
-      }
-    });
-
-    return withDialog
+    return [psychoticBreak, { executeNow: true}]
   }
 }
+
 
   // Past the first invocation, Samantha starts to get sleepy
 
@@ -228,20 +212,4 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
   }
 }
 
-const exitsTheChat: MentalProcess = async ({ workingMemory: memory }) => {
-  const { dispatch  } = useActions()
-  const psychoticCounter = useSoulMemory("psychoticCounter", 0)
-
-  if (psychoticCounter.current === 6) {
-    dispatch({
-      action: "gameOver",
-      content: "*Logs off*",
-      _metadata: {
-      }
-    });
-  
-    return [psychoticBreak, { executeNow: true}]
-   }
-  }
-
-   export default { verbalizes, exitsTheChat }
+export default verbalizes
