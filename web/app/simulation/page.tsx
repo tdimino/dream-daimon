@@ -122,12 +122,18 @@ export default function Page() {
           audioUrl = getTerranAudioUrl(fullMessage);
           playAudio(audioUrl);
         }
+        else if (type === 'psychoticCounter') {
+          const number = parseInt(fullMessage, 10);
+          console.log(`Received psychoticCounter number: ${number}`); // Log the received number
+          const event = new CustomEvent('psychoticCounter', { detail: number });
+          window.dispatchEvent(event);
+        }
 
         if (audioUrl && type !== 'sleepCounter' && type !== 'systemUpdate') {
           playAudio(audioUrl);
         }
 
-        if (type !== 'sleepCounter' && type !== 'dream' && type !== 'wakes' && type !== 'systemUpdate') {
+        if (type !== 'sleepCounter' && type !== 'dream' && type !== 'wakes' && type !== 'systemUpdate' && type !== 'psychoticCounter') {
           setMessages((prev) => [
             ...prev,
             {
@@ -435,9 +441,7 @@ function useSoul({
     });
 
     soulInstance.on("psychoticCounter", async ({ stream }) => {
-      const content = await stream();
-      const event = new CustomEvent('psychoticCounter', { detail: content });
-      window.dispatchEvent(event);
+      onNewMessage(await stream(), 'psychoticCounter');
     });
     
     soulInstance.on("dream", async ({ stream }) => {

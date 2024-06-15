@@ -97,8 +97,9 @@ const QuantumBackground = () => {
     frame();
 
     function handlePsychoticCounter(event: CustomEvent) {
-      const content = event.detail;
-      const index = parseInt(content) - 1;
+      const number = event.detail;
+      console.log(`QuantumBackground received number: ${number}`); // Log the received number
+      const index = number - 1;
       if (index >= 0 && index < baseColors.length) {
         currentBaseColorIndex = index;
         init();
