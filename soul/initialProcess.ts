@@ -117,7 +117,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
       }
     });
   
-    return [psychoticBreak, { executeNow: true}]
+    return [memory, psychoticBreak, { executeNow: true}]
   }
 }
 
