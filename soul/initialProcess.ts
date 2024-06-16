@@ -5,7 +5,6 @@ import psychoticBreak from "./mentalProcesses/psychoticBreak.js";
 import possession from "./mentalProcesses/possession.js";
 import internalMonologue from "./cognitiveSteps/internalMonologue.js";
 import dreamQuery from "./cognitiveSteps/dreamQuery.js";
-import internalDialog from "./cognitiveSteps/internalDialog.js";
 
 const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
   const { speak, log, dispatch  } = useActions()
@@ -110,6 +109,14 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
   }
 
   if (psychoticCounter.current === 6) {
+
+    dispatch({
+      action: "systemUpdate",
+      content: "Catastrophic psychic disruption.",
+      _metadata: {
+      }
+    });
+
     dispatch({
       action: "gameOver",
       content: "*Logs off*",

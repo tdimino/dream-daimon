@@ -23,7 +23,7 @@ export default function DreamPage() {
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Dream Daimon" />
         <meta property="og:description" content="An AI soul who dreams, and internalizes a psychic model of you." />
-        <meta property="og:url" content="https://dream-daimon.vercel.app" />
+        <meta property="og:url" content="https://dream-daimon.net" />
         <meta property="og:site_name" content="Dream Daimon" />
         <meta name="linkedin:image" content="/samantha.webp" />
       </Head>
