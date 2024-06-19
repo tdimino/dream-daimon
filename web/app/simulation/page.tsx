@@ -11,6 +11,7 @@ import DarkModeBackground from "@/components/DarkModeBackground";
 import QuantumBackground from "@/components/QuantumBackground";
 import MadeWithSoulEngine from "@/components/MadeWithSoulEngine";
 import JoinDiscord from "@/components/JoinDiscord";
+import DreamLogOverlay from "@/components/DreamLogOverlay";
 
 export type ChatMessage =
   | {
@@ -95,6 +96,8 @@ export default function Page() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isThinking, setIsThinking] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [dreamLogMessage, setDreamLogMessage] = useState("");
   const audioRef = useRef<HTMLAudioElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -106,8 +109,22 @@ export default function Page() {
     scrollToBottom();
   }, [messages]);
 
+  const handleViewDreamLog = () => {
+    setShowOverlay(true);
+  };
+
+  const handleCloseOverlay = () => {
+    setShowOverlay(false);
+  };
+
   const { soul, isConnected, reconnect } = useSoul({
     onNewMessage: async (stream: AsyncIterable<string>, type: string) => {
+      if (type === 'gameOver') {
+        setIsThinking(false);
+        console.log("Game over");
+        return;
+      }
+
       setIsThinking(type === 'thinks');
       let fullMessage = '';
       try {
@@ -136,17 +153,16 @@ export default function Page() {
           const event = new CustomEvent('psychoticCounter', { detail: number });
           window.dispatchEvent(event);
         }
-
-        else if (type === 'gameOver') {
-          setIsThinking(false);
-          console.log("Game over");
+        else if (type === 'dreamModel') {
+          const sanitizedMessage = fullMessage.replace(/[\#*]/g, ''); 
+          setDreamLogMessage(sanitizedMessage); // Set the full message for the overlay
         }
 
         if (audioUrl && type !== 'sleepCounter' && type !== 'systemUpdate') {
           playAudio(audioUrl);
         }
 
-        if (type !== 'sleepCounter' && type !== 'dream' && type !== 'wakes' && type !== 'systemUpdate' && type !== 'psychoticCounter') {
+        if (type !== 'sleepCounter' && type !== 'dream' && type !== 'wakes' && type !== 'systemUpdate' && type !== 'psychoticCounter' && type !== 'dreamModel') {
           setMessages((prev) => [
             ...prev,
             {
@@ -159,31 +175,35 @@ export default function Page() {
       } catch (error) {
         console.error("Error processing message:", error);
       } finally {
-        setIsThinking(false); // Ensure isThinking is set to false when done
+        if (type !== 'gameOver') {
+          setIsThinking(false); // Ensure isThinking is set to false when done
+        }
       }
     },
     onProcessStarted: () => {
       setIsThinking(true);
     },
-    onDream: async () => { // Add handler for "dream" event
+    onDream: async () => {
       setIsDarkMode(true); // Switch to dark mode
       const messageContent = "Entering dream state...";
+
       setMessages((prev) => [
         ...prev,
         {
           type: "system",
-          content: messageContent,
+          content: (
+            <>
+              {messageContent}
+              <Button
+                small
+                className="text-primary font-medium bg-secondary hover:underline z-10 ml-2" 
+                onClick={() => handleViewDreamLog()}
+              >
+                View dream log
+              </Button>
+            </>
+          ),
         },
-        // {
-        //   type: "system",
-        //   content: (
-        //     <Button asChild className="tyrian-purple">
-        //       <Link href="/dream" passHref>
-        //         View dream log
-        //       </Link>
-        //     </Button>
-        //   ),
-        // },
       ]);
 
       try {
@@ -193,7 +213,7 @@ export default function Page() {
         console.error("Error playing dream state audio:", error);
       }
     },
-    onWake: async () => { // Add handler for "wakes" event
+    onWake: async () => {
       setIsDarkMode(false); // Switch to light mode
       const messageContent = "Exiting dream state...";
       setMessages((prev) => [
@@ -212,8 +232,6 @@ export default function Page() {
       }
     },
   });
-
-
 
   async function handleSendMessage(message: string, verb: string) {
     if (!soul || !isConnected) {
@@ -393,6 +411,7 @@ export default function Page() {
             onSendMessage={handleSendMessage}
           />
         </div>
+        {showOverlay && <DreamLogOverlay message={dreamLogMessage} onClose={handleCloseOverlay} />}
       </div>
     </div>
   );
@@ -460,6 +479,10 @@ function useSoul({
 
     soulInstance.on("psychoticCounter", async ({ stream }) => {
       onNewMessage(await stream(), 'psychoticCounter');
+    });
+
+    soulInstance.on("dreamModel", async ({ stream }) => {
+      onNewMessage(await stream(), 'dreamModel');
     });
     
     soulInstance.on("dream", async ({ stream }) => {

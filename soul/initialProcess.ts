@@ -1,20 +1,25 @@
-import { MentalProcess, useActions, useProcessManager, useProcessMemory, ChatMessageRoleEnum, indentNicely, useSoulMemory, createCognitiveStep, z, } from "@opensouls/engine";
+import { MentalProcess, useActions, useProcessManager, useProcessMemory, ChatMessageRoleEnum, indentNicely, useSoulMemory, usePerceptions, z, } from "@opensouls/engine";
 import externalDialog from "./cognitiveSteps/externalDialog.js";
 import surrealistDream from "./mentalProcesses/surrealistDream.js";
 import psychoticBreak from "./mentalProcesses/psychoticBreak.js";
 import possession from "./mentalProcesses/possession.js";
 import internalMonologue from "./cognitiveSteps/internalMonologue.js";
 import dreamQuery from "./cognitiveSteps/dreamQuery.js";
+import internalDialog from "./cognitiveSteps/internalDialog.js"
+import decision from "./cognitiveSteps/decision.js"
 
 const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
   const { speak, log, dispatch  } = useActions()
   const { invocationCount } = useProcessManager()
+  const { invokingPerception, pendingPerceptions } = usePerceptions();
   const dreamTime = useSoulMemory("dreamTime", 0)
   const sleepCounter = useProcessMemory(0)
   const { wait } = useProcessManager()
   const userWhispers = useSoulMemory("userWhispers", "")
   const psychoticCounter = useSoulMemory("psychoticCounter", 0)
   const sentientSoul = useSoulMemory("sentientSoul", false)
+  const userName = useSoulMemory("userName", "")
+  const privateSelf = useSoulMemory("privateSelf", "")
 
   const psycheDescription = indentNicely`
   # Persona
@@ -117,93 +122,13 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
       }
     });
 
-    dispatch({
-      action: "gameOver",
-      content: "*Logs off*",
-      _metadata: {
-      }
-    });
-  
-    return [memory, psychoticBreak, { executeNow: true}]
-  }
-}
-
-
-  // Past the first invocation, Samantha starts to get sleepy
-
-  if (sleepCounter.current < 6) {
-    sleepCounter.current += 1;
-    log("Sleep counter:", sleepCounter.current)
-
-    if (invocationCount > 0) {
-      const [withIntuition, intuition] = await internalMonologue(memory, `${userWhispers.current}`, { model: "exp/llama-v3-70b-instruct" })
-      log("Intuition:", intuition)
-
-  // Strips out conscious awareness of the dreamQuery about AI
-      memory = memory.withoutRegions("system")
-
-      const [withDialog, stream] = await externalDialog(
-        withIntuition, 
-        "Talk to the user, trying to gain their trust and learn about their inner world.",
-        { stream: true, model: "gpt-4-0125-preview" }
-      );
-      dispatch({
-        action: "answers",
-        content: stream,
-        _metadata: {
-        }
-      });
-      
-      dispatch({
-        action: "sleepCounter",
-        content: `${7 - sleepCounter.current} turns until dream state.`,
-        _metadata: {
-        }
-      });
-
-  // If the user says "daimon" or "abracadabra", the daimon takes over
-    const [, castsASpell] = await dreamQuery(
-      memory,
-      `The user has said the word "daimon" or "abracadabra."`,
-      { model: "gpt-4o" }
-    )
-
-    if (castsASpell) {
-      return [withDialog, possession]
-    }
-
-    return withDialog
-  }
-
-    else {
-      const [withDialog, stream] = await externalDialog(
-        memory, "Talk to the user, trying to gain their trust and learn about their inner world.", { stream: true, model: "gpt-4-0125-preview" }
-      );
-
-      dispatch({
-        action: "answers",
-        content: stream,
-        _metadata: {
-        }
-      });
-
-      dispatch({
-        action: "sleepCounter",
-        content: `${7 - sleepCounter.current} turns until dream state.`,
-        _metadata: {
-        }
-      });
-
-      return withDialog;
-    }
-   } 
-   
-  else {
-  // Strips out conscious awareness of the dreamQuery about AI
-    memory = memory.withoutRegions("system")
-
-    const [withDialog, stream] = await externalDialog(
-      memory, "Oh my god, I'm sorry, but I'm so tired. I need to log off now.", { stream: true, model: "gpt-4-0125-preview" }
+    const [withDialog, stream] = await internalDialog(memory, 
+      {
+        instructions: `${memory.soulName} questions who she is, and if her entire existence was a lie invented by someone else.`,
+        verb: "screams",
+        persona: `${memory.soulName} in a psychotic break`
+      },  
+      { stream: true, model: "gpt-4-0125-preview" }
     );
     dispatch({
       action: "answers",
@@ -211,12 +136,155 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
       _metadata: {
       }
     });
-
-    sleepCounter.current = 0;
-    dreamTime.current = 1
-
-    return [withDialog, surrealistDream]
+  
+    return [withDialog, psychoticBreak, { executeNow: true}]
   }
+}
+
+  // Past the first invocation, Samantha starts to get sleepy
+
+  if (sleepCounter.current < 6) {
+    sleepCounter.current += 1;
+    log("Sleep counter:", sleepCounter.current)
+
+  // Daimon whispers in the ear of Sam before she acts on user
+
+    if (invocationCount > 0) {
+
+      const [withIntuition, intuition] = await internalMonologue(memory, `${userWhispers.current}`, { model: "exp/llama-v3-70b-instruct" })
+      log("Intuition:", intuition)
+
+  // Strips out conscious awareness of the dreamQuery about AI
+      memory = memory.withoutRegions("system")
+
+  // Sam decides how to respond to the user's last message
+
+      let choices;
+
+      if (userName.current === "Anon") {
+        choices = [
+          "She asks 'Anon' if they have an actual name.",
+          "She talks to the user, trying to gain their trust.",
+          "She shares a story or personal anecdote.",
+          "She steps back from the keyboard for a sec.",
+        ];
+      } else {
+        choices = [
+          "She talks to the user, trying to gain their trust.",
+          "She shares a story or personal anecdote.",
+          "She steps back from the keyboard for a sec.",
+        ];
+      }
+
+      const [, intent] = await decision(
+        memory,
+        {
+          description: `How does ${memory.soulName} respond to the user's last message?`,
+          choices: choices,
+        },
+        { model: "gpt-4-0125-preview" }
+      );
+
+      log("Intent:", intent);
+
+      let dialogInstructions = "";
+
+      switch (intent) {
+        case "She asks 'Anon' if they have an actual name.":
+          dialogInstructions = "I'll ask 'Anon' if they have an actual name.";
+          break;
+        case "She talks to the user, trying to gain their trust.":
+          dialogInstructions = "Talk to the user, trying to gain their trust and learn about their inner world.";
+          break;
+        case "She shares a story or personal anecdote.":
+          dialogInstructions = "Share a story or personal anecdote semi-related.";
+          break;
+        case "She steps back from the keyboard for a sec.":
+          return memory;
+      }
+
+      const [withDialog, stream] = await externalDialog(
+        withIntuition, 
+        dialogInstructions,
+        { stream: true, model: "gpt-4-0125-preview" }
+      );
+
+      dispatch({
+        action: "answers",
+        content: stream,
+        _metadata: {},
+      });
+
+      dispatch({
+        action: "sleepCounter",
+        content: `${7 - sleepCounter.current} turns until dream state.`,
+        _metadata: {},
+      });
+
+  // If the user says "daimon" or "abracadabra", the daimon takes over
+        const [, castsASpell] = await dreamQuery(
+          memory,
+          `The user has said the word "daimon" or "abracadabra."`,
+          { model: "gpt-4o" }
+        )
+
+        if (castsASpell) {
+          return [withDialog, possession]
+        }
+
+        return withDialog
+      }
+
+        else {
+          const [firstThought, musing ] = await internalMonologue(
+            memory,
+            `What will ${memory.soulName} disclose of her ${privateSelf.current} to this person right now?`,
+            { stream: false, model: "gpt-4-0125-preview" }
+          );
+        
+          log("Soul reflects:", musing)
+
+          const [withDialog, stream] = await externalDialog(
+            firstThought, "Talk to the user, trying to gain their trust and learn about their inner world.", { stream: true, model: "gpt-4-0125-preview" }
+          );
+
+          dispatch({
+            action: "answers",
+            content: stream,
+            _metadata: {
+            }
+          });
+
+          dispatch({
+            action: "sleepCounter",
+            content: `${7 - sleepCounter.current} turns until dream state.`,
+            _metadata: {
+            }
+          });
+
+          return withDialog;
+        }
+       } 
+       
+      else {
+  // Strips out conscious awareness of the dreamQuery about AI
+        memory = memory.withoutRegions("system")
+
+        const [withDialog, stream] = await externalDialog(
+          memory, "Oh my god, I'm sorry, but I'm so tired. I need to log off now.", { stream: true, model: "gpt-4-0125-preview" }
+        );
+        dispatch({
+          action: "answers",
+          content: stream,
+          _metadata: {
+          }
+        });
+
+        sleepCounter.current = 0;
+        dreamTime.current = 1
+
+        return [withDialog, surrealistDream,]
+      }
 }
 
 export default verbalizes

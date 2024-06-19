@@ -65,66 +65,65 @@
     --ring: 212.7 26.8% 83.9%;
   }
 
-  /* styles.css or a CSS module */
   .matrix-green {
-    color: #00ff00; /* Matrix green color */
-    font-family: 'Courier New', Courier, monospace; /* Optional: Matrix-like font */
-    text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00; /* Optional: Glowing effect */
+    color: #00ff00;
+    font-family: 'Courier New', Courier, monospace;
+    text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
   }
 
   .custom-apricot {
-    background-color: #FDBF6F; /* APRICOT */
+    background-color: #FDBF6F;
   }
 
   .tyrian-purple {
-    color: #66023C !important; /* Tyrian purple color */
-    text-shadow: none !important; /* Remove any text shadow */
-    transition: box-shadow 0.3s ease-in-out; /* Smooth transition for the glow effect */
+    color: #66023C !important;
+    text-shadow: none !important;
+    transition: box-shadow 0.3s ease-in-out;
     font-size: 1.2em;
   }
 
   .tyrian-purple:hover {
-    color: #7A1F5C !important; /* Slightly lighter Tyrian purple for hover effect */
-    box-shadow: 0 0 5px rgba(122, 31, 92, 0.8), 0 0 10px rgba(122, 31, 92, 0.6); /* Glow effect */
+    color: #7A1F5C !important;
+    box-shadow: 0 0 5px rgba(122, 31, 92, 0.8), 0 0 10px rgba(122, 31, 92, 0.6);
   }
 
   .faq-answer-background {
-    background-color: rgba(133, 24, 151, 0.75); /* Midpoint color between purple and Tyrian purple */
-    color: #f0f0f0; /* Lighter text color for better contrast */
-    padding: 1.2rem; /* Increased padding for more breathing space */
-    border-radius: 1rem; /* Gently rounded corners */
+    background-color: rgba(133, 24, 151, 0.75);
+    color: #f0f0f0;
+    padding: 1.2rem;
+    border-radius: 1rem;
     font-size: 1.2em;
-    line-height:1.6em;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
-
+    line-height: 1.6em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .faq-question-custom {
-    color: #00ff00 !important; 
-    font-family: 'Courier New', Courier, monospace !important; 
-    text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00 !important; 
-    font-size: 1.2em !important; 
+    color: #00ff00 !important;
+    font-family: 'Courier New', Courier, monospace !important;
+    text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00 !important;
+    font-size: 1.2em !important;
     transition: all 0.3s ease;
-    transform-origin: left center; /* Specify the origin point */
+    transform-origin: left center;
   }
 
   .faq-question-custom:hover {
-    color: #FFEB3B !important; /* Light Bulb Yellow */
-    text-shadow: 0 0 10px rgba(255, 235, 59, 0.8) !important; /* Light Bulb Yellow shadow */
-    transform: scale(1.025); /* Optional: Add a slight scale effect on hover */
+    color: #FFEB3B !important;
+    text-shadow: 0 0 10px rgba(255, 235, 59, 0.8) !important;
+    transform: scale(1.025);
   }
-    .faq-item {
+
+  .faq-item {
     margin-bottom: 10px;
   }
-  
+
   .large-button {
-    height: 3.5rem !important; 
-    font-size: 1.5rem !important; /* Match the font size */
-    font-family: 'Courier New', Courier, monospace !important; /* Match the font family */
-    font-weight: bold !important; /* Match the font weight */
-    padding: 0 2rem !important; 
-    max-width: 8em; /* Set a maximum width relative to the font size */
-    margin: 0 auto; /* Center the button */
+    height: 3.5rem !important;
+    font-size: 1.5rem !important;
+    font-family: 'Courier New', Courier, monospace !important;
+    font-weight: bold !important;
+    padding: 0 2rem !important;
+    max-width: 8em;
+    margin: 0 auto;
   }
 
   .large-heading {
@@ -135,7 +134,7 @@
     position: relative;
     display: inline-block;
   }
-  
+
   .seal-of-minos-glow {
     position: absolute;
     top: 50%;
@@ -150,12 +149,12 @@
     pointer-events: none;
     z-index: -1;
   }
-  
+
   .seal-of-minos-container:hover .seal-of-minos-glow {
     opacity: 1;
     animation: glowPulse 2s infinite;
   }
-  
+
   @keyframes glowPulse {
     0% {
       transform: translate(-50%, -50%) scale(1);
@@ -170,23 +169,70 @@
       opacity: 0.8;
     }
   }
-  
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto&display=swap');
+
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
+  .dream-overlay-content {
+    background: linear-gradient(45deg, rgba(133, 24, 151, 0.75), rgba(66, 3, 60, 0.75));
+    animation: gradientAnimation 10s ease infinite;
+    color: #f0f0f0;
+    padding: 1.2rem;
+    border-radius: 1rem;
+    border: 2px solid rgba(0, 255, 0, 0.8);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.4), 0 0 40px rgba(0, 255, 0, 0.2);
+    animation: pulseGlow 2s infinite;
   }
 
-  .faq-question {
-    transition: all 0.3s ease;
+  .dream-overlay-heading {
+    color: #00ff00;
+    font-family: 'Orbitron', sans-serif;
+    text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
   }
 
-  .faq-question:hover {
+  .dream-overlay-message {
+    font-size: 1.2em;
+    line-height: 1.6em;
+    margin-bottom: 1.2rem;
+  }
 
+  .dream-overlay-message div {
+    margin-bottom: 1.0rem;
+  }
+
+  .dream-overlay-message:hover {
+    transform: translateZ(10px);
+  }
+
+  .dream-overlay-button {
+    background-color: #66023C;
+    transition: background-color 0.3s ease;
+  }
+
+  .dream-overlay-button:hover {
+    background-color: #7A1F5C;
+  }
+
+  @keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes pulseGlow {
+    0% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.4), 0 0 40px rgba(0, 255, 0, 0.2); }
+    50% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.6), 0 0 60px rgba(0, 255, 0, 0.4); }
+    100% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.4), 0 0 40px rgba(0, 255, 0, 0.2); }
+  }
+
+  .fade-in {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
   }
 }
 

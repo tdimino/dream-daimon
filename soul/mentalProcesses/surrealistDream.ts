@@ -30,12 +30,6 @@ import soulSheds from "../mentalProcesses/soulSheds";
 
 if (invocationCount === 0) {
 
-  dispatch({
-      action: "dream",
-      content: "Entering dream state...",
-      _metadata: {
-      }
-    }); 
   }
 
 if (melatoninCounter.current < 4) {

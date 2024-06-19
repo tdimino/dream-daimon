@@ -71,6 +71,13 @@ const dreamGenie = createCognitiveStep(({existingDream}: { existingDream?: strin
           _metadata: {
           }
         });
+
+        dispatch({
+          action: "dream",
+          content: "Entering dream state...",
+          _metadata: {
+          }
+        }); 
   
         return finalStep;
       }
