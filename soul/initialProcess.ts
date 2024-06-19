@@ -7,6 +7,7 @@ import internalMonologue from "./cognitiveSteps/internalMonologue.js";
 import dreamQuery from "./cognitiveSteps/dreamQuery.js";
 import internalDialog from "./cognitiveSteps/internalDialog.js"
 import decision from "./cognitiveSteps/decision.js"
+import mentalQuery from "./cognitiveSteps/mentalQuery.js"
 
 const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
   const { speak, log, dispatch  } = useActions()
@@ -159,6 +160,13 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
 
   // Sam decides how to respond to the user's last message
 
+
+  const [, spamCheck] = await mentalQuery(memory, `Is the user just spamming me right now?`, { model: "gpt-4o" })
+  if (spamCheck) {
+    log("Spam check:", spamCheck)
+    return memory
+  }
+
       let choices;
 
       if (userName.current === "Anon") {
@@ -197,7 +205,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
           dialogInstructions = "Talk to the user, trying to gain their trust and learn about their inner world.";
           break;
         case "She shares a story or personal anecdote.":
-          dialogInstructions = "Share a story or personal anecdote semi-related.";
+          dialogInstructions = "Share a story or personal anecdote.";
           break;
         case "She steps back from the keyboard for a sec.":
           return memory;

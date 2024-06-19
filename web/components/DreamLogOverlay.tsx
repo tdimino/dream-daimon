@@ -40,9 +40,14 @@ const DreamLogOverlay: React.FC<DreamLogOverlayProps> = ({ message, onClose }) =
     };
   }, []);
 
-  const formattedMessage = message.split('\n').map((line, index) => (
-    <div key={index} className="fade-in">{line}</div>
-  ));
+  const formattedMessage = message.split('\n').map((line, index) => {
+    const isSceneLine = line.startsWith('Scene');
+    return (
+      <div key={index} className="fade-in">
+        {isSceneLine ? <strong>{line}</strong> : line}
+      </div>
+    );
+  });
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
