@@ -35,7 +35,7 @@ const DreamLogOverlay: React.FC<DreamLogOverlayProps> = ({ message, onClose }) =
   }, []);
 
   const formattedMessage = message.split('\n').map((line, index) => {
-    const isSceneLine = line.startsWith('Scene');
+    const isSceneLine = line.trim().startsWith('Scene');
     return (
       <div key={index} className="fade-in">
         {isSceneLine ? <strong>{line}</strong> : line}

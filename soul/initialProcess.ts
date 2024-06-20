@@ -164,7 +164,26 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
   const [, spamCheck] = await mentalQuery(memory, `Is the user just spamming me right now?`, { model: "gpt-4o" })
   if (spamCheck) {
     log("Spam check:", spamCheck)
-    return memory
+
+    let [spamThought, feeling] = await internalMonologue(memory,
+      `${memory.soulName} is being spammed by the user.`,
+      { stream: true, model: "gpt-4-0125-preview" }
+    );
+
+      dispatch({
+        action: "murmurs",
+        content: feeling,
+        _metadata: {
+        }
+    });
+
+    dispatch({
+      action: "sleepCounter",
+      content: `${7 - sleepCounter.current} turns until dream state.`,
+      _metadata: {},
+    });
+
+    return spamThought
   }
 
       let choices;
@@ -208,7 +227,25 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
           dialogInstructions = "Share a story or personal anecdote.";
           break;
         case "She steps back from the keyboard for a sec.":
-          return memory;
+          let [pauseThought, pauseFeeling] = await internalMonologue(memory,
+            `${memory.soulName} takes a brief pause to gather her thoughts.`,
+            { stream: true, model: "gpt-4-0125-preview" }
+          );
+
+          dispatch({
+            action: "murmurs",
+            content: pauseFeeling,
+            _metadata: {}
+          });
+
+          dispatch({
+            action: "sleepCounter",
+            content: `${7 - sleepCounter.current} turns until dream state.`,
+            _metadata: {
+            }
+          });
+
+          return pauseThought;
       }
 
       const [withDialog, stream] = await externalDialog(

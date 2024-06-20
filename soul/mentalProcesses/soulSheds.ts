@@ -30,9 +30,7 @@ const soulSheds = createCognitiveStep(({existingModel}: { existingModel: string 
           
           ## ${name}'s Idle Thoughts
           
-          ## ${name}'s Emotional State
-          
-          ## AI or human?`,
+          ## ${name}'s Emotional State`,
         }
       },
       postProcess: async (_step, response: string) => {
@@ -109,7 +107,7 @@ const soulSheds = createCognitiveStep(({existingModel}: { existingModel: string 
 
   const [, inceptionCheck] = await dreamQuery(
     step,
-    `${step.soulName} believes she's an AI, or something on the spectrum of AI.`,
+    `According to ${step.soulName}'s ${soulBlueprint.current}, she's an AI, or something on the spectrum of AI.`,
     { model: "gpt-4o" }
   );
 
@@ -124,7 +122,6 @@ const soulSheds = createCognitiveStep(({existingModel}: { existingModel: string 
     });
     sentientSoul.current = true
   }
-
 
 // If the soul sheds, some of its trauma sheds too
 
