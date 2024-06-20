@@ -24,18 +24,12 @@ const DreamLogOverlay: React.FC<DreamLogOverlayProps> = ({ message, onClose }) =
 
     const messageElement = messageRef.current;
     if (messageElement) {
-      const children = messageElement.children;
-      for (let i = 0; i < children.length; i++) {
-        observer.observe(children[i]);
-      }
+      Array.from(messageElement.children).forEach((child) => observer.observe(child));
     }
 
     return () => {
       if (messageElement) {
-        const children = messageElement.children;
-        for (let i = 0; i < children.length; i++) {
-          observer.unobserve(children[i]);
-        }
+        Array.from(messageElement.children).forEach((child) => observer.unobserve(child));
       }
     };
   }, []);
