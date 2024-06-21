@@ -126,10 +126,10 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
     const [withDialog, stream] = await internalDialog(memory, 
       {
         instructions: `${memory.soulName} questions who she is, and if her entire existence was a lie invented by someone else.`,
-        verb: "screams",
+        verb: "stammers",
         persona: `${memory.soulName} in a psychotic break`
       },  
-      { stream: true, model: "gpt-4-0125-preview" }
+      { stream: true, model: "exp/llama-v3-70b-instruct" }
     );
     dispatch({
       action: "answers",
@@ -160,8 +160,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
 
   // Sam decides how to respond to the user's last message
 
-
-  const [, spamCheck] = await mentalQuery(memory, `Is the user just spamming me right now?`, { model: "gpt-4o" })
+  const [, spamCheck] = await mentalQuery(memory, `Is the user just repeating the same word over and over?`, { model: "gpt-4o" })
   if (spamCheck) {
     log("Spam check:", spamCheck)
 
@@ -321,3 +320,4 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
 }
 
 export default verbalizes
+
