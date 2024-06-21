@@ -165,25 +165,13 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
   if (spamCheck) {
     log("Spam check:", spamCheck)
 
-    let [spamThought, feeling] = await internalMonologue(memory,
-      `${memory.soulName} is being spammed by the user.`,
-      { stream: true, model: "gpt-4-0125-preview" }
-    );
-
-      dispatch({
-        action: "murmurs",
-        content: feeling,
-        _metadata: {
-        }
-    });
-
     dispatch({
       action: "sleepCounter",
       content: `${7 - sleepCounter.current} turns until dream state.`,
       _metadata: {},
     });
 
-    return spamThought
+    return memory
   }
 
       let choices;

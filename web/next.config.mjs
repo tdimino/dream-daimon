@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  optimizeFonts: false, // Added optimizeFonts setting
   experimental: {
-    // Remove or correct any invalid keys here
   },
   async headers() {
     return [
