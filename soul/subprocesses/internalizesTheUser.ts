@@ -14,11 +14,8 @@ const userNotes = createCognitiveStep(({existingModel}: { existingModel?: string
         content: indentNicely`
         You are the daimon of ${name} who is tasked with maintaining a detailed mental model of ${userName.current}.
 
-        ## Existing Model 
-        ${existingModel || "No existing model of the user yet"}
-
         ## Description
-        Model the mind of ${userName.current}, based on the provided chat history, and what you infer about their personality, diction, beliefs, and background.
+        Model the mind of ${userName.current}, based on the provided chat history, and what you can infer about their personality, diction, beliefs, and background.
         
         Please format the daimon's response so that it mirrors this **example blueprint**, albeit for ${userName.current}:
 

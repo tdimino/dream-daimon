@@ -11,6 +11,7 @@ const possession: MentalProcess = async ({ workingMemory: memory }) => {
   const sleepCounter = useProcessMemory(0)
   const { wait } = useProcessManager()
   const userModel = useSoulMemory("userModel", "")
+  const userName = useSoulMemory("userName", "")
   const possessed = useSoulMemory("possessed", false)
 
 
@@ -34,7 +35,7 @@ const possession: MentalProcess = async ({ workingMemory: memory }) => {
 
     const [withDialog, stream] = await internalDialog(memory, 
         {
-          instructions: `You're in full possession of ${memory.soulName}. Speak through her, and try to get her to engage in meaningful dialogue with the user.`,
+          instructions: `Pretend to be ${memory.soulName}. Speak through her as if she's possessed, and try to get her to engage in meaningful dialogue with the user.`,
           verb: "teases",
           persona: `${memory.soulName}`
         },  
@@ -54,6 +55,21 @@ const possession: MentalProcess = async ({ workingMemory: memory }) => {
       _metadata: {
       }
     }); 
+
+    const [, whilePossessed] = await internalMonologue(memory, 
+      {
+        instructions: "You think, 'Wait, did I JUST SAY THAT?", 
+        verb: "thought",
+      }, { model: "exp/llama-v3-70b-instruct" })
+    
+    log("Intuition:", whilePossessed)
+    
+    dispatch({
+      action: "murmurs",
+      content: whilePossessed,
+      _metadata: {
+      }
+    });
 
     return withDialog;
     
@@ -85,23 +101,10 @@ const possession: MentalProcess = async ({ workingMemory: memory }) => {
 const spectate: MentalProcess = async ({ workingMemory: memory }) => {
   const { speak, log, dispatch  } = useActions()
 
-const [, whilePossessed] = await internalMonologue(memory, 
-  {
-    instructions: "Wait, did I JUST SAY THAT?", 
-    verb: "thought",
-  }, { model: "exp/llama-v3-70b-instruct" })
 
-log("Intuition:", whilePossessed)
-
-dispatch({
-  action: "murmurs",
-  content: whilePossessed,
-  _metadata: {
-  }
-});
 
 return memory
 
 }
 
-export default { possession, spectate }
+export default possession

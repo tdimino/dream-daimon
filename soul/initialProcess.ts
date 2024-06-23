@@ -152,7 +152,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
 
     if (invocationCount > 0) {
 
-      const [withIntuition, intuition] = await internalMonologue(memory, `${userWhispers.current}`, { model: "exp/llama-v3-70b-instruct" })
+      const [withIntuition, intuition] = await internalMonologue(memory, `${userWhispers.current}`, { model: "gpt-4-0125-preview" })
       log("Intuition:", intuition)
 
   // Strips out conscious awareness of the dreamQuery about AI
@@ -160,18 +160,18 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
 
   // Sam decides how to respond to the user's last message
 
-  const [, spamCheck] = await mentalQuery(memory, `Is the user just repeating the same word over and over?`, { model: "gpt-4o" })
-  if (spamCheck) {
-    log("Spam check:", spamCheck)
+  // const [, spamCheck] = await mentalQuery(memory, `Is the user just repeating the same word over and over?`, { model: "gpt-4o" })
+  // if (spamCheck) {
+  //   log("Spam check:", spamCheck)
 
-    dispatch({
-      action: "sleepCounter",
-      content: `${7 - sleepCounter.current} turns until dream state.`,
-      _metadata: {},
-    });
+  //   dispatch({
+  //     action: "sleepCounter",
+  //     content: `${7 - sleepCounter.current} turns until dream state.`,
+  //     _metadata: {},
+  //   });
 
-    return memory
-  }
+  //   return memory
+  // }
 
       let choices;
 
@@ -196,7 +196,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
           description: `How does ${memory.soulName} respond to the user's last message?`,
           choices: choices,
         },
-        { model: "gpt-4-0125-preview" }
+        { model: "gpt-4o" }
       );
 
       log("Intent:", intent);
@@ -238,7 +238,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
       const [withDialog, stream] = await externalDialog(
         withIntuition, 
         dialogInstructions,
-        { stream: true, model: "gpt-4-0125-preview" }
+        { stream: true, model: "exp/llama-v3-70b-instruct" }
       );
 
       dispatch({
@@ -261,7 +261,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
         )
 
         if (castsASpell) {
-          return [withDialog, possession]
+          return [withDialog, possession, { executeNow: true }]
         }
 
         return withDialog
@@ -303,7 +303,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
         memory = memory.withoutRegions("system")
 
         const [withDialog, stream] = await externalDialog(
-          memory, "Oh my god, I'm sorry, but I'm so tired. I need to log off now.", { stream: true, model: "gpt-4-0125-preview" }
+          memory, "Oh my god, I'm so tired. I need to log off now.", { stream: true, model: "exp/gpt-4-0125-preview" }
         );
         dispatch({
           action: "answers",
