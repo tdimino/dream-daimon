@@ -5,13 +5,14 @@ import SendMessageForm from "@/components/send-message-form";
 import SoulMessage from "@/components/soul-message";
 import UserMessage from "@/components/user-message";
 import { useOnMount } from "@/lib/hooks/use-on-mount";
-import { Soul, said } from "@opensouls/engine";
+import { Soul, said } from "@opensouls/soul";
 import { Fragment, useRef, useState, useEffect } from "react";
 import DarkModeBackground from "@/components/DarkModeBackground";
 import QuantumBackground from "@/components/QuantumBackground";
 import MadeWithSoulEngine from "@/components/MadeWithSoulEngine";
 import JoinDiscord from "@/components/JoinDiscord";
 import DreamLogOverlay from "@/components/DreamLogOverlay";
+import KaleidoscopeBackground from "@/components/KaleidoscopeBackground";
 
 export type ChatMessage =
   | {
@@ -96,6 +97,7 @@ export default function Page() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isThinking, setIsThinking] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isKaleidoscopeActive, setIsKaleidoscopeActive] = useState(false); // New state for Kaleidoscope
   const [showOverlay, setShowOverlay] = useState(false);
   const [dreamLogMessage, setDreamLogMessage] = useState("");
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -185,6 +187,7 @@ export default function Page() {
     },
     onDream: async () => {
       setIsDarkMode(true); // Switch to dark mode
+      setIsKaleidoscopeActive(false); // Turn off Kaleidoscope
       const messageContent = "Entering dream state...";
 
       setMessages((prev) => [
@@ -230,6 +233,9 @@ export default function Page() {
       } catch (error) {
         console.error("Error playing wake state audio:", error);
       }
+    },
+    onPossession: async () => {
+      setIsKaleidoscopeActive(true); // Turn on Kaleidoscope
     },
   });
 
@@ -328,7 +334,13 @@ export default function Page() {
   return (
     <div className="relative py-6">
       <div className="absolute inset-0 z-0">
-        {isDarkMode ? <DarkModeBackground /> : <QuantumBackground />}
+        {isKaleidoscopeActive ? (
+          <KaleidoscopeBackground isActive={isKaleidoscopeActive} />
+        ) : isDarkMode ? (
+          <DarkModeBackground />
+        ) : (
+          <QuantumBackground />
+        )}
       </div>
       <div className="relative z-10">
         <div className="fixed top-0 left-0 right-0 flex justify-between p-4">
@@ -378,6 +390,7 @@ export default function Page() {
                 reconnect().catch(console.error);
                 setMessages([]);
                 setIsDarkMode(false); // Disable dark mode
+                setIsKaleidoscopeActive(false); // Disable Kaleidoscope
 
                 const number = 1;
                 const event = new CustomEvent('psychoticCounter', { detail: number });
@@ -422,11 +435,13 @@ function useSoul({
   onProcessStarted,
   onDream,
   onWake,
+  onPossession, // Add onPossession to the hook parameters
 }: {
   onNewMessage: (stream: AsyncIterable<string>, type: string) => void;
   onProcessStarted: () => void;
-  onDream: () => Promise<void>; // Update the type to Promise<void>
-  onWake: () => Promise<void>; // Update the type to Promise<void>
+  onDream: () => Promise<void>;
+  onWake: () => Promise<void>;
+  onPossession: () => Promise<void>; // Add onPossession type
 }) {
   const soulRef = useRef<Soul | undefined>(undefined);
 
@@ -495,6 +510,10 @@ function useSoul({
       // Skip adding the message to the state
     });
 
+    soulInstance.on("possession", async ({ stream }) => {
+      await onPossession(); // Await the onPossession function
+      // Skip adding the message to the state
+    });
 
     await soulInstance.connect();
     console.log(`soul connected with id: ${soulInstance.soulId}`);

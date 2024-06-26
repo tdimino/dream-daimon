@@ -12,6 +12,7 @@
   "dependencies": {
     "@opensouls/engine": "^0.1.33",
     "@radix-ui/react-slot": "^1.0.2",
+    "@types/three": "^0.165.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "lucide-react": "^0.363.0",
@@ -23,7 +24,8 @@
     "react-textarea-autosize": "^8.5.3",
     "soul-engine": "^0.1.42",
     "tailwind-merge": "^2.2.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "three": "^0.165.0"
   },
   "devDependencies": {
     "@types/node": "^20",

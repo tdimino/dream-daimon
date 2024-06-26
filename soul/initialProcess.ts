@@ -196,7 +196,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
           description: `How does ${memory.soulName} respond to the user's last message?`,
           choices: choices,
         },
-        { model: "gpt-4o" }
+        { model: "gpt-4-0125-preview" }
       );
 
       log("Intent:", intent);
@@ -261,7 +261,14 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
         )
 
         if (castsASpell) {
-          return [withDialog, possession, { executeNow: true }]
+
+          dispatch({
+            action: "possession",
+            content: "Soul possessed",
+            _metadata: {
+            }
+          });
+          return [withDialog, possession]
         }
 
         return withDialog
@@ -303,7 +310,7 @@ const verbalizes: MentalProcess = async ({ workingMemory: memory }) => {
         memory = memory.withoutRegions("system")
 
         const [withDialog, stream] = await externalDialog(
-          memory, "Oh my god, I'm so tired. I need to log off now.", { stream: true, model: "exp/gpt-4-0125-preview" }
+          memory, "Oh my god, I'm so tired. I need to log off now.", { stream: true, model: "gpt-4-0125-preview" }
         );
         dispatch({
           action: "answers",

@@ -11,7 +11,6 @@ const possession: MentalProcess = async ({ workingMemory: memory }) => {
   const sleepCounter = useProcessMemory(0)
   const { wait } = useProcessManager()
   const userModel = useSoulMemory("userModel", "")
-  const userName = useSoulMemory("userName", "")
   const possessed = useSoulMemory("possessed", false)
 
 
@@ -56,11 +55,13 @@ const possession: MentalProcess = async ({ workingMemory: memory }) => {
       }
     }); 
 
-    const [, whilePossessed] = await internalMonologue(memory, 
+    await wait(2000)
+
+    const [, whilePossessed] = await internalMonologue(withDialog, 
       {
-        instructions: "You think, 'Wait, did I JUST SAY THAT?", 
+        instructions: "Wait, did I JUST SAY THAT?", 
         verb: "thought",
-      }, { model: "exp/llama-v3-70b-instruct" })
+      }, { model: "gpt-4o" })
     
     log("Intuition:", whilePossessed)
     
@@ -96,15 +97,6 @@ const possession: MentalProcess = async ({ workingMemory: memory }) => {
 
     return [withDialog, surrealistDream]
   }
-}
-
-const spectate: MentalProcess = async ({ workingMemory: memory }) => {
-  const { speak, log, dispatch  } = useActions()
-
-
-
-return memory
-
 }
 
 export default possession
