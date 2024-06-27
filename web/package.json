@@ -7,11 +7,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "cd web && npm install"
+    "lint": "next lint"
   },
   "dependencies": {
     "@opensouls/engine": "^0.1.33",
