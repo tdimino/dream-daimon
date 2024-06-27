@@ -10,7 +10,8 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "cd web && npm install"
   },
   "dependencies": {
     "@opensouls/engine": "^0.1.33",
@@ -27,7 +28,7 @@
     "react-textarea-autosize": "^8.5.3",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
-    "three": "^0.160.0"
+    "three": "^0.165.0"
   },
   "devDependencies": {
     "@types/node": "^20",

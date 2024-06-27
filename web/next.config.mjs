@@ -25,6 +25,11 @@ const nextConfig = {
       },
     ];
   },
+  webpack: (config) => {
+    const path = require('path');
+    config.resolve.alias['three'] = path.resolve('./node_modules/three');
+    return config;
+  },
 };
 
 export default nextConfig;
