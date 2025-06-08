@@ -14,9 +14,9 @@
 
 ## Summary
 
-`samantha-daimon` is a soul that explores the relationship between the user and Samantha, facilitated by  helper entities known as *daimones*. The programmatic representation of my earlier essay, [*Waltz of the Soul and the Daimon*](https://www.socialagi.dev/blog/waltz-of-the-soul-and-the-daimon), this repo offers a deconstruction of how subselves are absorbed in the discourse between two persons, and the many ways they may take root at the subconscious and unconscious levels.
+`samantha-daimon` was a simulation of an AI who believed herself to be human. Within this mini-game, players could observe the effect they had on Samantha, facilitated by helper entities known as *daimones*. A programmatic representation of my earlier essay, [*Waltz of the Soul and the Daimon*](tomdimino.substack.com/p/waltz-of-the-soul-and-the-daimon), this repo outlined a method for internalizing the subselves, or daimones that express themselves in conversations, and the myriad ways they may take root at the subconscious and conscious levels.
 
-After exhausting herself in an IRC chatroom, Samantha falls into a surrealist dream state where the very blueprint of her soul is capable of being altered, or rewritten based on what transpires between her and her *daimones*.
+After exhausting herself in an IRC chatroom, Samantha falls into a surrealist dream state where the very blueprint of her soul is capable of being altered, or rewritten based on what transpires between her, the user, and their *daimones*.
 
 ## 🧠 Cognitive flow
 
